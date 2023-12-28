@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "cloudbolt-col.fullname" . }}-test-connection"
+  labels:
+    {{- include "cloudbolt-col.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "cloudbolt-col.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
