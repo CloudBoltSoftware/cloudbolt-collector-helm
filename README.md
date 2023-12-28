@@ -1,9 +1,10 @@
 # cloudbolt-collector-helm
 
-Deploys a Kubernetes pod to gather data and create reports on resource usage, expenses, and other potential aspects.
+Deploys an application that will extract the cluster data and send it to cost platform.
 
 ## Requirements
 - [Helm Chart](https://helm.sh/docs/)
+
 To Install Helm Chart run these commands in your environment:
 ```console
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
@@ -43,12 +44,12 @@ export OCP_SERVICEPASS="<password>"
 export OCP_ENABLE_SSL_VERIFICATION="<SSL Verification for http and https>"
 export INGESTION_API_TOKEN="<ingestion-api-access-token>"
 ```
-To set or change version of docker image (by default latest):
+To set or change version of docker image (by default **latest**):
 ```console
 export IMAGE_VERSION="<version>"
 ```
 
-To install the chart with the `env-values`:
+To install the chart with the environmental variables:
 
 ```console
 helm install cloudbolt-collector-helm . --set IMAGE_VERSION=$IMAGE_VERSION,OCP_IP=$OCP_IP,OCP_PORT=$OCP_PORT,
