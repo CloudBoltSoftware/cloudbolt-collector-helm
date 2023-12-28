@@ -34,6 +34,11 @@ Change directory into the project (only if you have taken the GitHub pull):
 ```console
 cd cloudbolt-collector-helm
 ```
+Create a new namespace/project in cluster for adding new deployment with following command
+
+```console
+oc new-project cloudbolt-collector
+```
 Set the environmental variables required for Helm Chart deployment (If not present in the environment) :
 
 ```console
@@ -52,6 +57,5 @@ export IMAGE_VERSION="<version>"
 To install the chart with the environmental variables:
 
 ```console
-helm install cloudbolt-collector-helm . --set IMAGE_VERSION=$IMAGE_VERSION,OCP_IP=$OCP_IP,OCP_PORT=$OCP_PORT,
-OCP_SERVICENAME=$OCP_SERVICENAME,OCP_SERVICEPASS=$OCP_SERVICEPASS,OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION,INGESTION_API_TOKEN=$INGESTION_API_TOKEN
+helm install cloudbolt-collector-helm . --set IMAGE_VERSION=$IMAGE_VERSION,OCP_IP=$OCP_IP,OCP_PORT=$OCP_PORT,OCP_SERVICENAME=$OCP_SERVICENAME,OCP_SERVICEPASS=$OCP_SERVICEPASS,OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION,INGESTION_API_TOKEN=$INGESTION_API_TOKEN
 ```
