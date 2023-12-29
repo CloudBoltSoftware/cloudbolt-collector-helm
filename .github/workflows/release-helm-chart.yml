@@ -12,6 +12,10 @@ on:
       chart_version:
         description: 'Chart version'
         required: true
+      latest: 
+        description: 'Latest'
+        required: true
+        default: 'false'
 
   workflow_call:
     inputs:
@@ -28,9 +32,8 @@ on:
         required: true
         type: string
 
-
 env:
-  CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Required environment variable
+  CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 permissions:
   contents: write
@@ -48,20 +51,48 @@ jobs:
 
     - name: Configure Git
       run: |
-        git config --global user.email "you@example.com"
-        git config --global user.name "Your Name"
-        # Replace with your email and name
+        git config --global user.email "github-actions@cloudbolt.io"
+        git config --global user.name "GitHub Actions"
+
+    - name: Create New Branch for Changes
+      id: create_branch
+      run: |
+        NEW_BRANCH="update-chart-${{ inputs.chart_version || github.event.inputs.chart_version }}"
+        git checkout -b $NEW_BRANCH
+        echo "branch=$NEW_BRANCH" >> $GITHUB_OUTPUT
+
+    - name: Update Chart.yaml with new versions
+      run: |
+        yq e '.appVersion = "${{ inputs.app_version || github.event.inputs.app_version }}"' -i Chart.yaml
+        yq e '.version = "${{ inputs.chart_version || github.event.inputs.chart_version }}"' -i Chart.yaml
+        yq e '.image.tag = "${{ inputs.image_tag || github.event.inputs.image_tag }}"' -i values.yaml
+
+    - name: Commit Updated Files
+      run: |
+        git add Chart.yaml values.yaml
+        git commit -m "Create release for version ${{ github.event.inputs.chart_version }}, appVersion ${{ github.event.inputs.app_version }}, and image tag ${{ github.event.inputs.image_tag }}"
+        git push origin ${{ steps.create_branch.outputs.branch }}
+
+    - name: Create Pull Request
+      run: >
+        gh pr create
+        --title "Update Helm Chart to version ${{ github.event.inputs.chart_version }}" 
+        --body "Updating appVersion to ${{ github.event.inputs.app_version }} and image tag to ${{ github.event.inputs.image_tag }}."
+        --head ${{ steps.create_branch.outputs.branch }}}
+        --base main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Publish Helm chart
-      uses: helm/chart-releaser-action@v1.6.1  # Updated to specified version
+      uses: helm/chart-releaser-action@v1.6.1
       with:
         charts_dir: .
-        config: path/to/config/file
-        skip_packaging: 'false'
-        skip_existing: 'true'
-        skip_upload: 'false'
-        mark_as_latest: 'true'
-        packages_with_index: 'true'
+        config: ./.cr.yaml
+        skip_packaging: false
+        skip_existing: true
+        skip_upload: false
+        mark_as_latest: ${{ inputs.latest || github.event.inputs.latest }}
+        packages_with_index: true
         pages_branch: gh-pages
       env:
         CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
