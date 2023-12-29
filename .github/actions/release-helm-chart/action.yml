@@ -67,7 +67,7 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github_token }}
 
     - name: Publish Helm chart
-      uses: helm/chart-releaser-action@v1.6.1
+      uses: helm/chart-releaser-action@v1.6.0
       with:
         charts_dir: .
         config: ./.cr.yaml
