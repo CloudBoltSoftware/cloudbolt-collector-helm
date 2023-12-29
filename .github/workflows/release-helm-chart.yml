@@ -32,8 +32,8 @@ on:
         required: true
         type: string
     outputs:
-      changed_charts: ${{ steps.publish.outputs.changed_charts }}
-      chart_version: ${{ steps.publish.outputs.chart_version }}
+      changed_charts: ${{ jobs.release.outputs.changed_charts }}
+      chart_version: ${{ jobs.release.outputs.chart_version }}
 
 env:
   CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -48,6 +48,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
+    outputs:
+      changed_charts: ${{ steps.publish.outputs.changed_charts }}
+      chart_version: ${{ steps.publish.outputs.chart_version }}
     steps:
     - name: Checkout
       uses: actions/checkout@v4
