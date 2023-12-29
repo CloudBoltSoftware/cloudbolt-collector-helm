@@ -71,8 +71,8 @@ helm install cloudbolt-collector-helm . --set IMAGE_VERSION=$IMAGE_VERSION,OCP_I
 ## Release Pipeline
 ### Diagram
 ```mermaid
-graph LR
-    A[Start Workflow] -->|workflow_dispatch| B[Check out repository]
+graph TB
+    A[Start Workflow] -->|workflow_call| B[Check out repository]
     B --> C[Configure Git]
     C --> D[Create New Branch for Changes]
     D --> E[Update Chart.yaml with new versions]
