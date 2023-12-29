@@ -1,0 +1,68 @@
+name: Release Helm Chart
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_version:
+        description: 'Application version'
+        required: true
+      image_tag:
+        description: 'Image tag'
+        required: true
+      chart_version:
+        description: 'Chart version'
+        required: true
+
+  workflow_call:
+    inputs:
+      app_version:
+        description: 'Application version'
+        required: true
+        type: string
+      image_tag:
+        description: 'Image tag'
+        required: true
+        type: string
+      chart_version:
+        description: 'Chart version'
+        required: true
+        type: string
+
+
+env:
+  CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Required environment variable
+
+permissions:
+  contents: write
+  packages: write
+  deployments: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Configure Git
+      run: |
+        git config --global user.email "you@example.com"
+        git config --global user.name "Your Name"
+        # Replace with your email and name
+
+    - name: Publish Helm chart
+      uses: helm/chart-releaser-action@v1.6.1  # Updated to specified version
+      with:
+        charts_dir: .
+        config: path/to/config/file
+        skip_packaging: 'false'
+        skip_existing: 'true'
+        skip_upload: 'false'
+        mark_as_latest: 'true'
+        packages_with_index: 'true'
+        pages_branch: gh-pages
+      env:
+        CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
