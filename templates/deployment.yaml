@@ -48,13 +48,19 @@ spec:
            - name: OCP_SERVICENAME
              value: {{ quote .Values.OCP_SERVICENAME }}
            - name: OCP_SERVICEPASS
-             value: {{ quote .Values.OCP_SERVICEPASS }}
+             valueFrom:
+               secretKeyRef:
+                 name: my-ocp-secret
+                 key: OCP_SERVICEPASS
            - name: OCP_ENABLE_SSL_VERIFICATION
              value: {{ quote .Values.OCP_ENABLE_SSL_VERIFICATION }}
            - name: INGESTION_API_URL
              value: {{ quote .Values.INGESTION_API_URL }}
            - name: INGESTION_API_TOKEN
-             value: {{ quote .Values.INGESTION_API_TOKEN }}
+             valueFrom:
+               secretKeyRef:
+                 name: cb-ingestion-token
+                 key: INGESTION_API_TOKEN
           livenessProbe:
             exec:
               command:

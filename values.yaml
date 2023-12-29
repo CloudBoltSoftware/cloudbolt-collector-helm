@@ -4,14 +4,12 @@
 
 replicaCount: 1
 
+IMAGE_VERSION: ""
 OCP_IP: ""
 OCP_PORT: ""
 OCP_SERVICENAME: ""
-OCP_SERVICEPASS: ""
 OCP_ENABLE_SSL_VERIFICATION: ""
 INGESTION_API_URL: ""
-INGESTION_API_TOKEN: ""
-IMAGE_VERSION: ""
 
 image:
   repository: cloudboltsoftware/cloudbolt-collector
