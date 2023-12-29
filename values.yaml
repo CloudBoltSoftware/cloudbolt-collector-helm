@@ -30,8 +30,8 @@ podLabels: {}
 
 podSecurityContext:
   runAsNonRoot: true
-  runAsUser: 1001021013
-  runAsGroup: 1001021013
+  # runAsUser: 1001021013
+  # runAsGroup: 1001021013
   seccompProfile:
     type: "RuntimeDefault"
 
