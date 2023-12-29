@@ -1,0 +1,28 @@
+name: PR Title Jira Ticket Check
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+jobs:
+  check-pr-title:
+    name: Ensure Jira Ticket
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v4
+
+    - name: Check PR title for Jira Ticket
+      run: |
+        PR_TITLE=$(jq -r .pull_request.title "$GITHUB_EVENT_PATH")
+        if ! [[ "$PR_TITLE" =~ CMP-[0-9]+ ]]; then
+          echo "Please change the PR title to '[CMP-xxxx] $PR_TITLE' to indicate the jira ticket the PR is associated with." >> $GITHUB_STEP_SUMMARY
+          echo "## :error: Error in PR Title" >> $GITHUB_STEP_SUMMARY
+          echo "The PR title does not follow the required format '[CMP-xxxx] Title'. Please update the title to include the associated JIRA ticket." >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
+      env:
+        GITHUB_EVENT_PATH: ${{ github.event_path }}
