@@ -60,7 +60,7 @@ oc create secret generic my-ocp-secret --from-literal=OCP_SERVICEPASS=<ocp-passw
 ```
 To create a secret for Ingestion API token required for API, run below command
 ```console
-oc create secret generic my-ocp-secret --from-literal=INGESTION_API_TOKEN=<ingestion-api-token> -n cloudbolt-collector
+oc create secret generic cb-ingestion-token --from-literal=INGESTION_API_TOKEN=<ingestion-api-token> -n cloudbolt-collector
 ```
 To install the chart with the environmental variables:
 
