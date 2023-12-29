@@ -41,6 +41,8 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           env:
+           - name: DEBUG
+             value: {{ quote .Values.DEBUG }}
            - name: OCP_IP
              value: {{ quote .Values.OCP_IP }}
            - name: OCP_PORT
