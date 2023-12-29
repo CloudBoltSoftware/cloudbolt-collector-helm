@@ -27,15 +27,20 @@ runs:
       with:
         ref: main
         repository: cloudboltsoftware/cloudbolt-collector-helm
+        token: ${{ inputs.github_token }}
 
     - name: Configure Git
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
         git config --global user.email "github-actions@cloudbolt.io"
         git config --global user.name "GitHub Actions"
 
     - name: Create New Branch for Changes
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
         NEW_BRANCH="publish-chart-${{ inputs.chart_version }}"
         git checkout -b $NEW_BRANCH
@@ -50,6 +55,8 @@ runs:
 
     - name: Commit Updated Files
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
         git add Chart.yaml values.yaml
         git commit -m "Create release for version ${{ inputs.chart_version }}, appVersion ${{ inputs.app_version }}, and image tag ${{ inputs.image_tag }}"
@@ -57,14 +64,14 @@ runs:
 
     - name: Create Pull Request
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
         gh pr create \
           --title "Update Helm Chart to version ${{ inputs.chart_version }}" \
           --body "Updating appVersion to ${{ inputs.app_version }} and image tag to ${{ inputs.image_tag }}." \
-          --head $NEW_BRANCH \
+          --head ${{ steps.create_branch.outputs.branch }} \
           --base main
-      env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
 
     - name: Publish Helm chart
       uses: helm/chart-releaser-action@v1.6.0
