@@ -89,4 +89,3 @@ runs:
         echo "Chart Version: ${{ inputs.chart_version }}"
         echo "Image Tag: ${{ inputs.image_tag }}"
         echo "Latest Release: ${{ inputs.latest }}"
-{
