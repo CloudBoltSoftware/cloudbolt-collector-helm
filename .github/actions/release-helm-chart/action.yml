@@ -65,6 +65,7 @@ runs:
           --body "Updating appVersion to ${{ inputs.app_version }} and image tag to ${{ inputs.image_tag }}." \
           --head ${{ steps.create_branch.outputs.branch }} \
           --base main
+          --repo CloudBoltSoftware/cloudbolt-collector-helm
 
     - name: Publish Helm chart
       uses: helm/chart-releaser-action@v1.6.0
