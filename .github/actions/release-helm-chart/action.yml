@@ -1,0 +1,92 @@
+name: 'Release Helm Chart'
+description: 'Automates the process of releasing a Helm chart'
+
+inputs:
+  app_version:
+    description: 'Application version'
+    required: true
+  image_tag:
+    description: 'Image tag'
+    required: true
+  chart_version:
+    description: 'Chart version'
+    required: true
+  latest:
+    description: 'Latest'
+    required: true
+    default: 'false'
+  github_token:
+    description: 'GitHub Token'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        ref: main
+        repository: cloudboltsoftware/cloudbolt-collector-helm
+
+    - name: Configure Git
+      shell: bash
+      run: |
+        git config --global user.email "github-actions@cloudbolt.io"
+        git config --global user.name "GitHub Actions"
+
+    - name: Create New Branch for Changes
+      shell: bash
+      run: |
+        NEW_BRANCH="publish-chart-${{ inputs.chart_version }}"
+        git checkout -b $NEW_BRANCH
+        echo "branch=$NEW_BRANCH" >> $GITHUB_OUTPUT
+
+    - name: Update Chart.yaml with new versions
+      shell: bash
+      run: |
+        yq e '.appVersion = "${ inputs.app_version }}"' -i Chart.yaml
+        yq e '.version = "${{ inputs.chart_version }}"' -i Chart.yaml
+        yq e '.image.tag = "${{ inputs.image_tag }}"' -i values.yaml
+
+    - name: Commit Updated Files
+      shell: bash
+      run: |
+        git add Chart.yaml values.yaml
+        git commit -m "Create release for version ${{ inputs.chart_version }}, appVersion ${{ inputs.app_version }}, and image tag ${{ inputs.image_tag }}"
+        git push origin ${{ steps.create_branch.outputs.branch }}
+
+    - name: Create Pull Request
+      shell: bash
+      run: |
+        gh pr create \
+          --title "Update Helm Chart to version ${{ inputs.chart_version }}" \
+          --body "Updating appVersion to ${{ inputs.app_version }} and image tag to ${{ inputs.image_tag }}." \
+          --head $NEW_BRANCH \
+          --base main
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+
+    - name: Publish Helm chart
+      uses: helm/chart-releaser-action@v1.6.1
+      with:
+        charts_dir: .
+        config: ./.cr.yaml
+        skip_packaging: false
+        skip_existing: true
+        skip_upload: false
+        mark_as_latest: ${{ inputs.latest }}
+        packages_with_index: true
+        pages_branch: gh-pages
+      env:
+        CR_TOKEN: ${{ inputs.github_token }}
+
+    - name: Output results
+      shell: bash
+      run: |
+        echo "Release Summary"
+        echo "New Branch: $NEW_BRANCH"
+        echo "App Version: ${{ inputs.app_version }}"
+        echo "Chart Version: ${{ inputs.chart_version }}"
+        echo "Image Tag: ${{ inputs.image_tag }}"
+        echo "Latest Release: ${{ inputs.latest }}"
+{

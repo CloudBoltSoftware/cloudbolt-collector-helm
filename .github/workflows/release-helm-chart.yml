@@ -1,0 +1,46 @@
+name: Release Helm Chart
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_version:
+        description: 'Application version'
+        required: true
+      image_tag:
+        description: 'Image tag'
+        required: true
+      chart_version:
+        description: 'Chart version'
+        required: true
+      latest: 
+        description: 'Latest'
+        required: true
+        default: 'false'
+      github_token:
+        description: 'GitHub Token'
+        required: true
+
+permissions:
+  contents: write
+  packages: write
+  deployments: write
+  pull-requests: write
+
+jobs:
+  release_helm_chart:
+    name: Release Helm Chart
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          repository: cloudboltsoftware/cloudbolt-collector-helm
+      - name: Publish Helm Chart
+        uses: cloudboltsoftware/cloudbolt-collector-helm/.github/actions/release-helm-chart@main
+        with: 
+          app_version: ${{ github.event.inputs.app_version }}
+          image_tag: ${{ github.event.inputs.image_tag }}
+          chart_version: ${{ github.event.inputs.chart_version }}
+          latest: ${{ github.event.inputs.latest }}
+          github_token: ${{ github.event.inputs.github_token }}

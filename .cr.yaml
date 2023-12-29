@@ -1,0 +1,4 @@
+generate-release-notes: true
+owner: CloudBoltSoftware
+git-repo: cloudboltsoftware/cloudbolt-collector-helm
+
