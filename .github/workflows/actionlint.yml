@@ -1,0 +1,32 @@
+name: ActionLint
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.0
+
+      - name: Download actionlint
+        id: get_actionlint
+        run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+        shell: bash
+
+      - name: Check workflow files
+        shell: bash
+        run: >
+          ${{ steps.get_actionlint.outputs.executable }}
+          -color
+          -ignore "SC2086"
+          -ignore "SC2155"
+          -ignore "SC2002"
+          -ignore "SC2129"
+          -ignore "SC2046"
+          -ignore "SC2016"
+          -ignore "SC2034"
+          -ignore "SC2005"
+
