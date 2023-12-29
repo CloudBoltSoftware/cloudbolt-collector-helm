@@ -20,35 +20,6 @@ on:
         description: 'GitHub Token'
         required: true
 
-  workflow_call:
-    inputs:
-      app_version:
-        description: 'Application version'
-        required: true
-        type: string
-      image_tag:
-        description: 'Image tag'
-        required: true
-        type: string
-      chart_version:
-        description: 'Chart version'
-        required: true
-        type: string
-      github_token: 
-        description: 'GitHub Token'
-        required: true
-        type: string
-    outputs:
-      changed_charts:
-        value: ${{ jobs.release.outputs.changed_charts }}
-        description: 'Changed charts'
-      chart_version:
-        value: ${{ jobs.release.outputs.chart_version }}
-        description: 'Chart version'
-
-env:
-  CR_TOKEN: ${{ inputs.github_token }}
-
 permissions:
   contents: write
   packages: write
@@ -56,79 +27,20 @@ permissions:
   pull-requests: write
 
 jobs:
-  release:
+  release_helm_chart:
+    name: Release Helm Chart
     runs-on: ubuntu-latest
-
-    outputs:
-      changed_charts: ${{ steps.publish.outputs.changed_charts }}
-      chart_version: ${{ steps.publish.outputs.chart_version }}
-    environment: Helm Chart Production
-    env:
-      GITHUB_TOKEN: ${{ inputs.github_token }}
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        ref: main
-        repository: cloudboltsoftware/cloudbolt-collector-helm
-
-    - name: Configure Git
-      run: |
-        git config --global user.email "github-actions@cloudbolt.io"
-        git config --global user.name "GitHub Actions"
-
-    - name: Create New Branch for Changes
-      id: create_branch
-      run: |
-        NEW_BRANCH="update-chart-${{ inputs.chart_version || github.event.inputs.chart_version }}"
-        git checkout -b $NEW_BRANCH
-        echo "branch=$NEW_BRANCH" >> $GITHUB_OUTPUT
-
-    - name: Update Chart.yaml with new versions
-      run: |
-        yq e '.appVersion = "${{ inputs.app_version || github.event.inputs.app_version }}"' -i Chart.yaml
-        yq e '.version = "${{ inputs.chart_version || github.event.inputs.chart_version }}"' -i Chart.yaml
-        yq e '.image.tag = "${{ inputs.image_tag || github.event.inputs.image_tag }}"' -i values.yaml
-
-    - name: Commit Updated Files
-      run: |
-        git add Chart.yaml values.yaml
-        git commit -m "Create release for version ${{ github.event.inputs.chart_version }}, appVersion ${{ github.event.inputs.app_version }}, and image tag ${{ github.event.inputs.image_tag }}"
-        git push origin ${{ steps.create_branch.outputs.branch }}
-
-    - name: Create Pull Request
-      run: >
-        gh pr create
-        --title "Update Helm Chart to version ${{ github.event.inputs.chart_version }}"
-        --body "Updating appVersion to ${{ github.event.inputs.app_version }} and image tag to ${{ github.event.inputs.image_tag }}."
-        --head ${{ steps.create_branch.outputs.branch }}
-        --base main
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Publish Helm chart
-      id: publish
-      uses: helm/chart-releaser-action@v1.6.1
-      with:
-        charts_dir: .
-        config: ./.cr.yaml
-        skip_packaging: false
-        skip_existing: true
-        skip_upload: false
-        mark_as_latest: ${{ inputs.latest || github.event.inputs.latest }}
-        packages_with_index: true
-        pages_branch: gh-pages
-      env:
-        CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Output results to GitHub Step Summary
-      run: |
-        echo "## Release Summary" >> $GITHUB_STEP_SUMMARY
-        echo "| Key | Value |" >> $GITHUB_STEP_SUMMARY
-        echo "| --- | ----- |" >> $GITHUB_STEP_SUMMARY
-        echo "| New Branch | ${{ steps.create_branch.outputs.branch }}" >> $GITHUB_STEP_SUMMARY
-        echo "| App Version | ${{ github.event.inputs.app_version }}" >> $GITHUB_STEP_SUMMARY
-        echo "| Chart Version | ${{ github.event.inputs.chart_version }}" >> $GITHUB_STEP_SUMMARY
-        echo "| Image Tag | ${{ github.event.inputs.image_tag }}" >> $GITHUB_STEP_SUMMARY
-        echo "| Latest Release | ${{ github.event.inputs.latest }}" >> $GITHUB_STEP_SUMMARY
-
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          repository: cloudboltsoftware/cloudbolt-collector-helm
+      - name: Publish Helm Chart
+        uses: cloudboltsoftware/cloudbolt-collector-helm/.github/actions/release-helm-chart@main
+        with: 
+          app_version: ${{ github.event.inputs.app_version }}
+          image_tag: ${{ github.event.inputs.image_tag }}
+          chart_version: ${{ github.event.inputs.chart_version }}
+          latest: ${{ github.event.inputs.latest }}
+          github_token: ${{ github.event.inputs.github_token }}
