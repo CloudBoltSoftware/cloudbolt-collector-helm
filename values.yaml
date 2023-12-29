@@ -4,6 +4,7 @@
 
 replicaCount: 1
 
+DEBUG: ""
 IMAGE_VERSION: ""
 OCP_IP: ""
 OCP_PORT: ""
