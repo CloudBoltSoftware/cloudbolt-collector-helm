@@ -32,6 +32,7 @@ runs:
 
     - name: Create New Branch for Changes
       shell: bash
+      id: branch
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
@@ -56,8 +57,9 @@ runs:
         gh pr create \
           --title "Update Helm Chart to version ${{ inputs.chart_version }}" \
           --body "Updating appVersion to ${{ inputs.app_version }} and image tag to ${{ inputs.image_tag }}." \
-          --base main
-          --repo CloudBoltSoftware/cloudbolt-collector-helm
+          --base main \
+          --repo CloudBoltSoftware/cloudbolt-collector-helm \
+          --head ${{ steps.branch.outputs.branch }}
 
     - name: Publish Helm chart
       uses: helm/chart-releaser-action@v1.6.0
