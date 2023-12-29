@@ -31,6 +31,9 @@ on:
         description: 'Chart version'
         required: true
         type: string
+    outputs:
+      changed_charts: ${{ steps.publish.outputs.changed_charts }}
+      chart_version: ${{ steps.publish.outputs.chart_version }}
 
 env:
   CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -84,6 +87,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Publish Helm chart
+      id: publish
       uses: helm/chart-releaser-action@v1.6.1
       with:
         charts_dir: .
@@ -96,4 +100,15 @@ jobs:
         pages_branch: gh-pages
       env:
         CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Output results to GitHub Step Summary
+      run: |
+        echo "## Release Summary" >> $GITHUB_STEP_SUMMARY
+        echo "| Key | Value |" >> $GITHUB_STEP_SUMMARY
+        echo "| --- | ----- |" >> $GITHUB_STEP_SUMMARY
+        echo "| New Branch | ${{ steps.create_branch.outputs.branch }}" >> $GITHUB_STEP_SUMMARY
+        echo "| App Version | ${{ github.event.inputs.app_version }}" >> $GITHUB_STEP_SUMMARY
+        echo "| Chart Version | ${{ github.event.inputs.chart_version }}" >> $GITHUB_STEP_SUMMARY
+        echo "| Image Tag | ${{ github.event.inputs.image_tag }}" >> $GITHUB_STEP_SUMMARY
+        echo "| Latest Release | ${{ github.event.inputs.latest }}" >> $GITHUB_STEP_SUMMARY
 
