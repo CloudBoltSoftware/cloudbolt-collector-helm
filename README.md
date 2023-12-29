@@ -39,6 +39,11 @@ Create a new namespace/project in cluster for adding new deployment with followi
 ```console
 oc new-project cloudbolt-collector
 ```
+Assigning UserID range is important for the namespace/project just created. Use below command to do that.
+
+```console
+oc annotate --overwrite namespace cloudbolt-collector openshift.io/sa.scc.uid-range='1000/1000' openshift.io/sa.scc.supplemental-groups='1000/1000'
+```
 Set the environmental variables required for Helm Chart deployment (If not present in the environment) :
 
 ```console
