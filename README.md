@@ -47,20 +47,23 @@ oc annotate --overwrite namespace cloudbolt-collector openshift.io/sa.scc.uid-ra
 Set the environmental variables required for Helm Chart deployment (If not present in the environment) :
 
 ```console
+export IMAGE_VERSION="<release-version>" (By default "latest")
 export OCP_IP="<openshift-cluster-ip>"
 export OCP_PORT="<openshift-cluster-port>"
-export OCP_SERVICENAME="<username>"
-export OCP_SERVICEPASS="<password>"
+export OCP_SERVICENAME="<ocp-username>"
 export OCP_ENABLE_SSL_VERIFICATION="<SSL Verification for http and https>"
-export INGESTION_API_TOKEN="<ingestion-api-access-token>"
+export INGESTION_API_URL="<ingestion-api-url>"
 ```
-To set or change version of docker image (by default **latest**):
+To create a secret for OCP Password required for API, run below command
 ```console
-export IMAGE_VERSION="<version>"
+oc create secret generic my-ocp-secret --from-literal=OCP_SERVICEPASS=<ocp-password> -n cloudbolt-collector
 ```
-
+To create a secret for Ingestion API token required for API, run below command
+```console
+oc create secret generic my-ocp-secret --from-literal=INGESTION_API_TOKEN=<ingestion-api-token> -n cloudbolt-collector
+```
 To install the chart with the environmental variables:
 
 ```console
-helm install cloudbolt-collector-helm . --set IMAGE_VERSION=$IMAGE_VERSION,OCP_IP=$OCP_IP,OCP_PORT=$OCP_PORT,OCP_SERVICENAME=$OCP_SERVICENAME,OCP_SERVICEPASS=$OCP_SERVICEPASS,OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION,INGESTION_API_TOKEN=$INGESTION_API_TOKEN
+helm install cloudbolt-collector-helm . --set IMAGE_VERSION=$IMAGE_VERSION,OCP_IP=$OCP_IP,OCP_PORT=$OCP_PORT,OCP_SERVICENAME=$OCP_SERVICENAME,OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION,INGESTION_API_URL=$INGESTION_API_URL
 ```
