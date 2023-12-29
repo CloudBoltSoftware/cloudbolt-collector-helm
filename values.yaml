@@ -4,6 +4,14 @@
 
 replicaCount: 1
 
+OCP_IP: ""
+OCP_PORT: ""
+OCP_SERVICENAME: ""
+OCP_SERVICEPASS: ""
+OCP_ENABLE_SSL_VERIFICATION: ""
+INGESTION_API_TOKEN: ""
+IMAGE_VERSION: ""
+
 image:
   repository: cloudboltsoftware/cloudbolt-collector
   pullPolicy: Always
@@ -30,8 +38,8 @@ podLabels: {}
 
 podSecurityContext:
   runAsNonRoot: true
-  runAsUser: 1001021013
-  runAsGroup: 1001021013
+  runAsUser: 1000
+  runAsGroup: 1000
   seccompProfile:
     type: "RuntimeDefault"
 
@@ -51,14 +59,6 @@ liveness:
   initialDelaySeconds: 300
   failureThreshold: 3
   periodSeconds: 300
-
-OCP_IP: ""
-OCP_PORT: ""
-OCP_SERVICENAME: ""
-OCP_SERVICEPASS: ""
-OCP_ENABLE_SSL_VERIFICATION: ""
-INGESTION_API_TOKEN: ""
-IMAGE_VERSION: ""
 
 ingress:
   enabled: false
