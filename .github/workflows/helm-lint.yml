@@ -1,0 +1,19 @@
+name: Helm Lint
+
+on:
+  pull_request:
+
+jobs:
+  lint-chart:
+    name: Lint Helm Chart
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up Helm
+      uses: azure/setup-helm@v3.5
+
+    - name: Run Helm Lint
+      run: helm lint .
