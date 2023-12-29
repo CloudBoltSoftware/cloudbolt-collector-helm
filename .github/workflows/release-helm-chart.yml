@@ -16,6 +16,9 @@ on:
         description: 'Latest'
         required: true
         default: 'false'
+      github_token:
+        description: 'GitHub Token'
+        required: true
 
   workflow_call:
     inputs:
@@ -31,6 +34,10 @@ on:
         description: 'Chart version'
         required: true
         type: string
+      github_token: 
+        description: 'GitHub Token'
+        required: true
+        type: string
     outputs:
       changed_charts:
         value: ${{ jobs.release.outputs.changed_charts }}
@@ -40,7 +47,7 @@ on:
         description: 'Chart version'
 
 env:
-  CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  CR_TOKEN: ${{ inputs.github_token }}
 
 permissions:
   contents: write
@@ -55,11 +62,15 @@ jobs:
     outputs:
       changed_charts: ${{ steps.publish.outputs.changed_charts }}
       chart_version: ${{ steps.publish.outputs.chart_version }}
+    environment: Helm Chart Production
+    env:
+      GITHUB_TOKEN: ${{ inputs.github_token }}
     steps:
     - name: Checkout
       uses: actions/checkout@v4
       with:
         ref: main
+        repository: cloudboltsoftware/cloudbolt-collector-helm
 
     - name: Configure Git
       run: |
