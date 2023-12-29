@@ -32,8 +32,12 @@ on:
         required: true
         type: string
     outputs:
-      changed_charts: ${{ jobs.release.outputs.changed_charts }}
-      chart_version: ${{ jobs.release.outputs.chart_version }}
+      changed_charts:
+        value: ${{ jobs.release.outputs.changed_charts }}
+        description: 'Changed charts'
+      chart_version:
+        value: ${{ jobs.release.outputs.chart_version }}
+        description: 'Chart version'
 
 env:
   CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -82,9 +86,9 @@ jobs:
     - name: Create Pull Request
       run: >
         gh pr create
-        --title "Update Helm Chart to version ${{ github.event.inputs.chart_version }}" 
+        --title "Update Helm Chart to version ${{ github.event.inputs.chart_version }}"
         --body "Updating appVersion to ${{ github.event.inputs.app_version }} and image tag to ${{ github.event.inputs.image_tag }}."
-        --head ${{ steps.create_branch.outputs.branch }}}
+        --head ${{ steps.create_branch.outputs.branch }}
         --base main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
