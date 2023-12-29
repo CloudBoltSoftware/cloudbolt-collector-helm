@@ -67,3 +67,18 @@ To install the chart with the environmental variables:
 ```console
 helm install cloudbolt-collector-helm . --set IMAGE_VERSION=$IMAGE_VERSION,OCP_IP=$OCP_IP,OCP_PORT=$OCP_PORT,OCP_SERVICENAME=$OCP_SERVICENAME,OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION,INGESTION_API_URL=$INGESTION_API_URL
 ```
+
+## Release Pipeline
+### Diagram
+```mermaid
+graph LR
+    A[Start Workflow] -->|workflow_dispatch| B[Check out repository]
+    B --> C[Configure Git]
+    C --> D[Create New Branch for Changes]
+    D --> E[Update Chart.yaml with new versions]
+    E --> F[Commit Updated Files]
+    F --> G[Create Pull Request]
+    G --> H[Publish Helm chart]
+    H --> I[Output results to GitHub Step Summary]
+    I --> J[End of Workflow]
+```
