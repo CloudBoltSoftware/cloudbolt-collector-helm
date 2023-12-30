@@ -54,7 +54,7 @@ runs:
       run: |
         git add Chart.yaml values.yaml
         git commit -m "Create release for version ${{ inputs.chart_version }}, appVersion ${{ inputs.app_version }}, and image tag ${{ inputs.image_tag }}"
-        # git push --set-upstream origin ${{ steps.branch.outputs.branch }}
+        git push --set-upstream origin ${{ steps.branch.outputs.branch }}
         # gh pr create \
           # --title "Update Helm Chart to version ${{ inputs.chart_version }}" \
           # --body "Updating appVersion to ${{ inputs.app_version }} and image tag to ${{ inputs.image_tag }}." \
