@@ -77,6 +77,7 @@ runs:
         pages_branch: gh-pages
       env:
         CR_TOKEN: ${{ inputs.github_token }}
+        GITHUB_REPOSITORY: cloudboltsoftware/cloudbolt-collector-helm
 
     - name: Output results
       shell: bash
