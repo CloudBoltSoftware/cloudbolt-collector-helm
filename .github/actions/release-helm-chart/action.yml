@@ -62,14 +62,18 @@ runs:
           --repo CloudBoltSoftware/cloudbolt-collector-helm \
           --head ${{ steps.branch.outputs.branch }}
 
+    - name: Make .cr-release-packages directory
+      shell: bash
+      run: |
+        mkdir -p ./.cr-release-packages
+
     - name: Publish Helm chart
       uses: helm/chart-releaser-action@v1.6.0
       with:
         charts_dir: .
         config: ./.cr.yaml
         skip_packaging: false
-        skip_existing: true
-        skip_upload: false
+        skip_existing: false
         mark_as_latest: ${{ inputs.latest }}
         packages_with_index: true
         pages_branch: gh-pages
