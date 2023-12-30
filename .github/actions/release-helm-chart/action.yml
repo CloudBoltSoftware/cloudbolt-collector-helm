@@ -68,12 +68,11 @@ runs:
         mkdir -p ./.cr-release-packages
 
     - name: Install Chart Releaser
+      shell: bash
       run: |
         curl -L https://github.com/helm/chart-releaser/releases/download/v1.6.1/chart-releaser_1.6.1_linux_amd64.tar.gz -o chart-releaser.tar.gz
         tar -zxvf chart-releaser.tar.gz
         sudo mv cr /usr/local/bin/
-        cr --version
-      shell: bash
 
     - name: Package Helm Chart
       shell: bash
