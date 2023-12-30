@@ -72,10 +72,8 @@ runs:
       with:
         charts_dir: .
         config: ./.cr.yaml
-        skip_packaging: false
-        skip_existing: false
         mark_as_latest: ${{ inputs.latest }}
-        packages_with_index: true
+        packages_with_index: 'true'
         pages_branch: gh-pages
       env:
         CR_TOKEN: ${{ inputs.github_token }}
