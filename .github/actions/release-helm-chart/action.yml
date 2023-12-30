@@ -92,7 +92,7 @@ runs:
         --git-repo cloudbolt-collector-helm \
         --token $GITHUB_TOKEN \
         --generate-release-notes \
-        --release-name-template "v${{ inputs.chart_version }}" \
+        --release-name-template "${{ inputs.chart_version }}" \
         --package-path ./.cr-release-packages
         echo "Updating index.yaml"
         cr index \
