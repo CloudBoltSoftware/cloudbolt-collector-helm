@@ -67,16 +67,41 @@ runs:
       run: |
         mkdir -p ./.cr-release-packages
 
-    - name: Publish Helm chart
-      uses: helm/chart-releaser-action@v1.6.0
-      with:
-        charts_dir: .
-        config: ./.cr.yaml
-        mark_as_latest: ${{ inputs.latest }}
-        packages_with_index: 'true'
-        pages_branch: gh-pages
+    - name: Install Chart Releaser
+      run: |
+        curl -L https://github.com/helm/chart-releaser/releases/download/v1.6.1/chart-releaser_1.6.1_linux_amd64.tar.gz -o chart-releaser.tar.gz
+        tar -zxvf chart-releaser.tar.gz
+        sudo mv cr /usr/local/bin/
+        cr --version
+      shell: bash
+
+    - name: Package Helm Chart
+      shell: bash
+      run: |
+        cr package --config .cr.yaml --package-path ./.cr-release-packages
+
+    - name: Create GitHub Release
+      shell: bash
       env:
-        CR_TOKEN: ${{ inputs.github_token }}
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+      run: |
+        echo "Creating GitHub Release"
+        cr upload \
+        --config .cr.yaml \
+        --owner CloudBoltSoftware \
+        --git-repo cloudbolt-collector-helm \
+        --token $GITHUB_TOKEN \
+        --release-name "v${{ inputs.chart_version }}" \
+        --release-description "v${{ inputs.app_version }}" \
+        --package-path ./.cr-release-packages
+        echo "Updating index.yaml"
+        cr index \
+        --config .cr.yaml \
+        --owner CloudBoltSoftware \
+        --git-repo cloudbolt-collector-helm \
+        --token $GITHUB_TOKEN \
+        --charts-repo https://CloudBoltSoftware.github.io/cloudbolt-collector-helm \
+        --push
 
     - name: Output results
       shell: bash
