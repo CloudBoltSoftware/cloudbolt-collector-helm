@@ -93,7 +93,9 @@ runs:
         --token $GITHUB_TOKEN \
         --generate-release-notes \
         --release-name-template "${{ inputs.chart_version }}" \
-        --package-path ./.cr-release-packages
+        --package-path ./.cr-release-packages \
+        --pages-branch gh-pages \
+        --push
         echo "Updating index.yaml"
         cr index \
         --config .cr.yaml \
