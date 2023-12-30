@@ -86,6 +86,7 @@ runs:
       run: |
         echo "Creating GitHub Release"
         cr upload \
+        --commit $(git rev-parse HEAD) \
         --config .cr.yaml \
         --owner CloudBoltSoftware \
         --git-repo cloudbolt-collector-helm \
