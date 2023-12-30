@@ -90,8 +90,8 @@ runs:
         --owner CloudBoltSoftware \
         --git-repo cloudbolt-collector-helm \
         --token $GITHUB_TOKEN \
-        --release-name "v${{ inputs.chart_version }}" \
-        --release-description "v${{ inputs.app_version }}" \
+        --generate-release-notes \
+        --release-name-template "v${{ inputs.chart_version }}" \
         --package-path ./.cr-release-packages
         echo "Updating index.yaml"
         cr index \
