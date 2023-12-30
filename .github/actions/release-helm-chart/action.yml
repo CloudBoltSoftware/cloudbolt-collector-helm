@@ -43,7 +43,7 @@ runs:
     - name: Update Chart.yaml with new versions
       shell: bash
       run: |
-        yq e '.appVersion = "${ inputs.app_version }}"' -i Chart.yaml
+        yq e '.appVersion = "${{ inputs.app_version }}"' -i Chart.yaml
         yq e '.version = "${{ inputs.chart_version }}"' -i Chart.yaml
         yq e '.image.tag = "${{ inputs.image_tag }}"' -i values.yaml
 
