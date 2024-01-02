@@ -22,13 +22,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Import GPG Key
-      shell: bash
-      env:
-        PGP_PRIVATE_KEY: ${{ inputs.pgp_key }}
-      run: |
-        echo "${{ secrets.PGP_PRIVATE_KEY }}" | gpg --import
-
     - name: Install Helm
       run: |
         curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
