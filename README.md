@@ -49,16 +49,7 @@ helm repo add cloudbolt-collector https://cloudboltsoftware.github.io/cloudbolt-
 helm repo update
 ```
 
-### 3. Install the Public Key for Chart Verification
-
-Download and install the public key used to sign the Helm charts:
-
-```console
-curl -o cloudbolt-collector.key https://cloudboltsoftware.github.io/cloudbolt-collector-helm/public.key
-gpg --import cloudbolt-collector.key
-```
-
-### 4. Create a New Namespace/Project
+### 3. Create a New Namespace/Project
 
 Create a new project or namespace in your OpenShift cluster:
 
@@ -66,7 +57,7 @@ Create a new project or namespace in your OpenShift cluster:
 oc new-project cloudbolt-collector
 ```
 
-### 5. Set Namespace/Project Annotations
+### 4. Set Namespace/Project Annotations
 
 Annotate the newly created namespace:
 
@@ -74,7 +65,7 @@ Annotate the newly created namespace:
 oc annotate --overwrite namespace cloudbolt-collector openshift.io/sa.scc.uid-range='1000/1000' openshift.io/sa.scc.supplemental-groups='1000/1000'
 ```
 
-### 6. Set Environmental Variables
+### 5. Set Environmental Variables
 
 Replace `<placeholders>` with appropriate values:
 
@@ -87,7 +78,7 @@ export OCP_ENABLE_SSL_VERIFICATION="<SSL Verification for http and https>"
 export INGESTION_API_URL="<ingestion-api-url>"
 ```
 
-### 7. Create Secrets for API Access
+### 6. Create Secrets for API Access
 
 Create the necessary secrets for API access:
 
@@ -100,7 +91,7 @@ oc create secret generic cb-ingestion-token \
   --from-literal=INGESTION_API_TOKEN=<ingestion-api-token> \
   -n cloudbolt-collector
 ```
-### 8. Install the Chart
+### 7. Install the Chart
 
 Install the latest CloudBolt Collector Helm chart from the `cloudbolt-collector` repository. 
 If you want to install version `v0.20.0`, you can specify it using the `--version` flag:
