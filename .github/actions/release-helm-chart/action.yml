@@ -18,10 +18,32 @@ inputs:
   github_token:
     description: 'GitHub Token'
     required: true
+  pgp_key:
+    description: "PGP Key for signing the Helm chart"
+    required: true
+  pgp_passphrase:
+    description: "PGP Passphrase for signing the Helm chart"
+    required: true
+  pgp_key_id:
+    description: "PGP Key ID for signing the Helm chart"
+    required: true
 
 runs:
   using: "composite"
   steps:
+    - name: Import GPG Key
+      shell: bash
+      env:
+        PGP_PRIVATE_KEY: ${{ inputs.pgp_key }}
+      run: |
+        echo "${{ secrets.PGP_PRIVATE_KEY }}" | gpg --import
+
+    - name: Install Helm
+      run: |
+        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+        chmod 700 get_helm.sh
+        ./get_helm.sh
+
     - name: Configure Git
       shell: bash
       env:
@@ -55,62 +77,65 @@ runs:
         git add Chart.yaml values.yaml
         git commit -m "Create release for version ${{ inputs.chart_version }}, appVersion ${{ inputs.app_version }}, and image tag ${{ inputs.image_tag }}"
         git push --set-upstream origin ${{ steps.branch.outputs.branch }}
-        # gh pr create \
-          # --title "Update Helm Chart to version ${{ inputs.chart_version }}" \
-          # --body "Updating appVersion to ${{ inputs.app_version }} and image tag to ${{ inputs.image_tag }}." \
-          # --base main \
-          # --repo CloudBoltSoftware/cloudbolt-collector-helm \
-          # --head ${{ steps.branch.outputs.branch }}
 
-    - name: Make .cr-release-packages directory
-      shell: bash
-      run: |
-        mkdir -p ./.cr-release-packages
-
-    - name: Install Chart Releaser
-      shell: bash
-      run: |
-        curl -L https://github.com/helm/chart-releaser/releases/download/v1.6.1/chart-releaser_1.6.1_linux_amd64.tar.gz -o chart-releaser.tar.gz
-        tar -zxvf chart-releaser.tar.gz
-        sudo mv cr /usr/local/bin/
+    - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.12.1
 
     - name: Package Helm Chart
       shell: bash
+      run: >
+        echo "${{ inputs.pgp_passphrase }}" |
+        helm package
+        --version ${{ inputs.chart_version }}
+        --app-version ${{ inputs.app_version }}
+        --destination ./docs
+        --sign 
+        --key ${{ inputs.pgp_key_id }}
+        --passphrase-file -
+        .
+
+    - name: Update Helm Repo Index
+      shell: bash
+      run: >
+        helm repo index
+        docs
+        --url https://cloudboltsoftware.github.io/cloudbolt-collector-helm/
+
+    - name: Commit Updated Helm Repo Index
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
-        cr package --config .cr.yaml --package-path ./.cr-release-packages
+        git add docs
+        git commit -m "Update Helm Repo Index"
+        git push
 
     - name: Create GitHub Release
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
-      run: |
-        echo "Creating GitHub Release"
-        cr upload \
-        --commit $(git rev-parse HEAD) \
-        --config .cr.yaml \
-        --owner CloudBoltSoftware \
-        --git-repo cloudbolt-collector-helm \
-        --token $GITHUB_TOKEN \
-        --generate-release-notes \
-        --release-name-template "${{ inputs.chart_version }}" \
-        --package-path ./.cr-release-packages \
-        --pages-branch gh-pages \
-        --push
-        echo "Updating index.yaml"
-        cr index \
-        --config .cr.yaml \
-        --owner CloudBoltSoftware \
-        --git-repo cloudbolt-collector-helm \
-        --token $GITHUB_TOKEN \
-        --charts-repo https://CloudBoltSoftware.github.io/cloudbolt-collector-helm \
-        --push
+      run: >
+        gh release create
+        ${{ inputs.chart_version }}
+        --target ${{ steps.branch.outputs.branch }}
+        --generate-notes
+        ./docs/*.tgz
 
     - name: Output results
       shell: bash
       run: |
-        echo "Release Summary"
-        echo "New Branch: $NEW_BRANCH"
-        echo "App Version: ${{ inputs.app_version }}"
-        echo "Chart Version: ${{ inputs.chart_version }}"
-        echo "Image Tag: ${{ inputs.image_tag }}"
-        echo "Latest Release: ${{ inputs.latest }}"
+        echo "| Key            | Value |"
+        echo "|----------------|-------|"
+        echo "| New Branch     | $NEW_BRANCH |"
+        echo "| App Version    | ${{ inputs.app_version }} |"
+        echo "| Chart Version  | ${{ inputs.chart_version }} |"
+        echo "| Image Tag      | ${{ inputs.image_tag }} |"
+        echo "| Latest Release | ${{ inputs.latest }} |"
+        echo "| Package URL    | [Link](https://cloudboltsoftware.github.io/cloudbolt-collector-helm/cloudbolt-collector-${{ inputs.chart_version }}.tgz) |"
+        echo "| Docs URL       | [Link](https://cloudboltsoftware.github.io/cloudbolt-collector-helm/) |"
+        echo "| Release URL    | [Link](https://github.com/CloudBoltSoftware/cloudbolt-collector-helm/releases/tag/${{ inputs.chart_version }}) |"
+        echo "| Public Key    | [Link](https://cloudboltsoftware.github.io/cloudbolt-collector-helm/public.key) |"
+
+
