@@ -1,85 +1,138 @@
-# cloudbolt-collector-helm
+# CloudBolt Collector Helm Chart
 
-Deploys an application that will extract the cluster data and send it to cost platform.
+The `cloudbolt-collector` chart deploys an application that extracts Kubernetes cluster utilization data 
+and sends it to the CloudBolt platform.
 
 ## Requirements
-- [Helm Chart](https://helm.sh/docs/)
 
-To Install Helm Chart run these commands in your environment:
-```console
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-```
-```console
-chmod 700 get_helm.sh
-```
-```console
-./get_helm.sh
-```
+- **Helm 3:** To install Helm, run the following commands:
+  ```console
+  curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+  chmod 700 get_helm.sh
+  ./get_helm.sh
+  ```
 
+## Configuration Parameters
 
-## How to install this chart
-Login to your OpenShift Cluster:
+Below is a table of various parameters that can be set in the `values.yaml` file of the `cloudbolt-collector-helm` chart, along with their required status and default values:
+
+| Parameter                          | Required   | Description                          | Default Value       |
+|------------------------------------|------------|--------------------------------------|---------------------|
+| `DEBUG`                            | No         | Debug mode flag                      | `""` (empty string) |
+| `IMAGE_VERSION`                    | No         | Version of the image                 | `"<helm-chart-version>"`|
+| `OCP_IP`                           | Yes        | OpenShift Cluster IP                 | `""` (empty string) |
+| `OCP_PORT`                         | Yes        | OpenShift Cluster Port               | `""` (empty string) |
+| `OCP_SERVICENAME`                  | Yes        | OpenShift Service Name               | `""` (empty string) |
+| `OCP_ENABLE_SSL_VERIFICATION`      | No         | SSL Verification for HTTP and HTTPS  | `""` (empty string) |
+| `INGESTION_API_URL`                | Yes        | Ingestion API URL                    | `""` (empty string) |
+
+## Prerequisites
+
+Before you begin, ensure you have access to an OpenShift Cluster and have Helm installed in your environment.
+
+## Installation Steps
+
+### 1. Login to Your OpenShift Cluster
+
+Execute the following command to log in to your OpenShift Cluster. Replace `<username>`, `<cluster-ip>`, and `<cluster-port>` with your actual OpenShift credentials and cluster information.
 
 ```console
 oc login --username <username> <cluster-ip>:<cluster-port>
 ```
-Clone the repo:
+
+### 2. Add the CloudBolt Helm Repository
+
+Add the CloudBolt Collector Helm repository to your Helm configuration:
 
 ```console
-git clone git@github.com:CloudBoltSoftware/cloudbolt-collector-helm.git
+helm repo add cloudbolt-collector https://cloudboltsoftware.github.io/cloudbolt-collector-helm/
+helm repo update
 ```
 
-Change directory into the project (only if you have taken the GitHub pull):
+### 3. Create a New Namespace/Project
 
-```console
-cd cloudbolt-collector-helm
-```
-Create a new namespace/project in cluster for adding new deployment with following command
+Create a new project or namespace in your OpenShift cluster:
 
 ```console
 oc new-project cloudbolt-collector
 ```
-Assigning UserID range is important for the namespace/project just created. Use below command to do that.
+
+### 4. Set Namespace/Project Annotations
+
+Annotate the newly created namespace:
 
 ```console
 oc annotate --overwrite namespace cloudbolt-collector openshift.io/sa.scc.uid-range='1000/1000' openshift.io/sa.scc.supplemental-groups='1000/1000'
 ```
-Set the environmental variables required for Helm Chart deployment (If not present in the environment) :
+
+### 5. Set Environmental Variables
+
+Replace `<placeholders>` with appropriate values:
 
 ```console
-export IMAGE_VERSION="<release-version>" (By default "latest")
+export IMAGE_VERSION="<release-version>"  # Default is chart version
 export OCP_IP="<openshift-cluster-ip>"
 export OCP_PORT="<openshift-cluster-port>"
 export OCP_SERVICENAME="<ocp-username>"
 export OCP_ENABLE_SSL_VERIFICATION="<SSL Verification for http and https>"
 export INGESTION_API_URL="<ingestion-api-url>"
 ```
-To create a secret for OCP Password required for API, run below command
-```console
-oc create secret generic my-ocp-secret --from-literal=OCP_SERVICEPASS=<ocp-password> -n cloudbolt-collector
-```
-To create a secret for Ingestion API token required for API, run below command
-```console
-oc create secret generic cb-ingestion-token --from-literal=INGESTION_API_TOKEN=<ingestion-api-token> -n cloudbolt-collector
-```
-To install the chart with the environmental variables:
+
+### 6. Create Secrets for API Access
+
+Create the necessary secrets for API access:
 
 ```console
-helm install cloudbolt-collector-helm . --set IMAGE_VERSION=$IMAGE_VERSION,OCP_IP=$OCP_IP,OCP_PORT=$OCP_PORT,OCP_SERVICENAME=$OCP_SERVICENAME,OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION,INGESTION_API_URL=$INGESTION_API_URL
+oc create secret generic my-ocp-secret \
+  --from-literal=OCP_SERVICEPASS=<ocp-password> \
+  -n cloudbolt-collector
+
+oc create secret generic cb-ingestion-token \
+  --from-literal=INGESTION_API_TOKEN=<ingestion-api-token> \
+  -n cloudbolt-collector
+```
+### 7. Install the Chart
+
+Install the latest CloudBolt Collector Helm chart from the `cloudbolt-collector` repository. 
+If you want to install version `v0.20.0`, you can specify it using the `--version` flag:
+
+```console
+helm install cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
+  --set OCP_IP=$OCP_IP \
+  --set OCP_PORT=$OCP_PORT \
+  --set OCP_SERVICENAME=$OCP_SERVICENAME \
+  --set OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION \
+  --set INGESTION_API_URL=$INGESTION_API_URL
 ```
 
-## Release Pipeline
-### Diagram
-```mermaid
-graph TB
-    K[cloudbolt-collector Image Published]-->A[workflow_call]
-    A[Start Workflow] -->B[Check out repository]
-    B --> C[Configure Git]
-    C --> D[Create New Branch for Changes]
-    D --> E[Update Chart.yaml with new versions]
-    E --> F[Commit Updated Files]
-    F --> G[Create Pull Request]
-    G --> H[Publish Helm chart]
-    H --> I[Output results to GitHub Step Summary]
-    I --> J[End of Workflow]
+### Upgrade the Chart
+
+To upgrade the CloudBolt Collector Helm chart to a newer version, first ensure your local Helm repository index is updated:
+
+```console
+helm repo update cloudbolt-collector
+```
+
+Then, upgrade the release to the desired version. If you want to upgrade to the latest version available in the repository, use the following command:
+
+```console
+helm upgrade cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
+  --set OCP_IP=$OCP_IP \
+  --set OCP_PORT=$OCP_PORT \
+  --set OCP_SERVICENAME=$OCP_SERVICENAME \
+  --set OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION \
+  --set INGESTION_API_URL=$INGESTION_API_URL
+```
+
+If you wish to upgrade to a specific version, use the `--version` flag:
+
+```console
+helm upgrade cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
+  --version v0.21.0 \
+  --set IMAGE_VERSION=$IMAGE_VERSION \
+  --set OCP_IP=$OCP_IP \
+  --set OCP_PORT=$OCP_PORT \
+  --set OCP_SERVICENAME=$OCP_SERVICENAME \
+  --set OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION \
+  --set INGESTION_API_URL=$INGESTION_API_URL
 ```

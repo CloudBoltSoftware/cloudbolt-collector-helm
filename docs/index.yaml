@@ -1,0 +1,15 @@
+apiVersion: v1
+entries:
+  cloudbolt-collector:
+  - apiVersion: v2
+    appVersion: v0.20.0
+    created: "2024-01-02T12:48:03.847712-08:00"
+    description: Deploys an application that extracts Kubernetes cluster utilization
+      data and sends it to the CloudBolt platform.
+    digest: fa305ffd7800367dd69fb9b76debe9294461ab0b68e4dac4eb04973374778b82
+    name: cloudbolt-collector
+    type: application
+    urls:
+    - https://cloudboltsoftware.github.io/cloudbolt-collector-helm/cloudbolt-collector-v0.20.0.tgz
+    version: v0.20.0
+generated: "2024-01-02T12:48:03.837035-08:00"
