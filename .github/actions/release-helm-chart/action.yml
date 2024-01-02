@@ -137,5 +137,3 @@ runs:
         echo "| Docs URL       | [Link](https://cloudboltsoftware.github.io/cloudbolt-collector-helm/) |"
         echo "| Release URL    | [Link](https://github.com/CloudBoltSoftware/cloudbolt-collector-helm/releases/tag/${{ inputs.chart_version }}) |"
         echo "| Public Key    | [Link](https://cloudboltsoftware.github.io/cloudbolt-collector-helm/public.key) |"
-
-
