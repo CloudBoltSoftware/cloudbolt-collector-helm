@@ -80,6 +80,13 @@ runs:
         gpg_private_key: ${{ inputs.pgp_private_key }}
         passphrase: ${{ inputs.pgp_passphrase }}
 
+    - name: Downgrade GPG to secring.pgp
+      shell: bash
+      run: |
+        mkdir -p ~/.gnupg
+        gpg --export >~/.gnupg/pubring.gpg
+        gpg --export-secret-keys >~/.gnupg/secring.gpg
+
     - name: Package Helm Chart
       shell: bash
       run: >
