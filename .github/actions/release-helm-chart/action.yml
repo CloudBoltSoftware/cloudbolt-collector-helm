@@ -75,8 +75,8 @@ runs:
         version: v3.12.1
 
     - name: Import PGP Key
-      bash: shell
-      rum: |
+      shell: bash
+      run: |
         echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode | gpg --import
 
     - name: Package Helm Chart
