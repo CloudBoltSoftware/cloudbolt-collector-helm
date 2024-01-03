@@ -88,9 +88,9 @@ runs:
         --version ${{ inputs.chart_version }}
         --app-version ${{ inputs.app_version }}
         --destination ./docs
-        --sign  \
-        --key 'CloudBolt Software Inc' \
-        --passphrase-file - \
+        --sign
+        --key 'CloudBolt Software Inc'
+        --passphrase-file -
         .
 
     - name: Update Helm Repo Index
