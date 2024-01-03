@@ -7,22 +7,52 @@ on:
       - edited
       - reopened
       - synchronize
+
 jobs:
   check-pr-title:
-    name: Ensure Jira Ticket
+    name: Validate PR Title
     runs-on: ubuntu-latest
+    outputs:
+      jira-check-passed: ${{ steps.jira-check.outcome == 'success' }}
+      release-check-passed: ${{ steps.release-check.outcome == 'success' }}
     steps:
-    - name: Check out code
-      uses: actions/checkout@v4
+      # Step 1: Check out the code
+      - name: Check out code
+        uses: actions/checkout@v4
 
-    - name: Check PR title for Jira Ticket
-      run: |
-        PR_TITLE=$(jq -r .pull_request.title "$GITHUB_EVENT_PATH")
-        if ! [[ "$PR_TITLE" =~ CMP-[0-9]+ ]]; then
-          echo "Please change the PR title to '[CMP-xxxx] $PR_TITLE' to indicate the jira ticket the PR is associated with." >> $GITHUB_STEP_SUMMARY
-          echo "## :error: Error in PR Title" >> $GITHUB_STEP_SUMMARY
-          echo "The PR title does not follow the required format '[CMP-xxxx] Title'. Please update the title to include the associated JIRA ticket." >> $GITHUB_STEP_SUMMARY
+      # Step 2: Check for Jira Ticket in PR Title
+      - name: Check for Jira Ticket in PR Title
+        id: jira-check
+        continue-on-error: true
+        run: |
+          PR_TITLE=$(jq -r .pull_request.title "$GITHUB_EVENT_PATH")
+          JIRA_TICKET_REGEX="^CMP-[0-9]+"
+          if ! [[ $PR_TITLE =~ $JIRA_TICKET_REGEX ]]; then
+            echo "PR title does not contain a valid JIRA ticket format (CMP-xxxx)."
+            exit 1
+          fi
+        env:
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+
+      # Step 3: Check for Release Prefix in PR Title
+      - name: Check for Release Prefix in PR Title
+        id: release-check
+        continue-on-error: true
+        run: |
+          PR_TITLE=$(jq -r .pull_request.title "$GITHUB_EVENT_PATH")
+          RELEASE_PREFIX_REGEX="^Release"
+          if ! [[ $PR_TITLE =~ $RELEASE_PREFIX_REGEX ]]; then
+            echo "PR title does not start with 'Release'."
+            exit 1
+          fi
+        env:
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+
+      # Step 4: Final Check
+      - name: Determine Success of Workflow
+        if: steps.jira-check.outcome == 'failure' && steps.release-check.outcome == 'failure'
+        run: |
+          echo "## :error: Invalid PR Title Format" >> $GITHUB_STEP_SUMMARY
+          echo "The PR title must start with a JIRA ticket (e.g., 'CMP-xxxx') or 'Release'."
+          echo "Please update the PR title to conform to the required format." >> $GITHUB_STEP_SUMMARY
           exit 1
-        fi
-      env:
-        GITHUB_EVENT_PATH: ${{ github.event_path }}
