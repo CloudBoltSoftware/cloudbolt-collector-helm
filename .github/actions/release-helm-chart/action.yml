@@ -29,6 +29,7 @@ runs:
   using: "composite"
   steps:
     - name: Install Helm
+      shell: bash
       run: |
         curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
         chmod 700 get_helm.sh
@@ -69,9 +70,9 @@ runs:
         git push --set-upstream origin ${{ steps.branch.outputs.branch }}
 
     - name: Set up Helm
-        uses: azure/setup-helm@v3
-        with:
-          version: v3.12.1
+      uses: azure/setup-helm@v3
+      with:
+        version: v3.12.1
 
     - name: Import PGP Key
       bash: shell
@@ -129,19 +130,19 @@ runs:
         --body "Release ${{ inputs.chart_version }}"
         --base main
         --head ${{ steps.branch.outputs.branch }}
+        --repo CloudBoltSoftware/cloudbolt-collector-helm
 
 
     - name: Output results
       shell: bash
       run: |
-        echo "| Key            | Value |"
-        echo "|----------------|-------|"
-        echo "| New Branch     | $NEW_BRANCH |"
-        echo "| App Version    | ${{ inputs.app_version }} |"
-        echo "| Chart Version  | ${{ inputs.chart_version }} |"
-        echo "| Image Tag      | ${{ inputs.image_tag }} |"
-        echo "| Latest Release | ${{ inputs.latest }} |"
-        echo "| Package URL    | [Link](https://cloudboltsoftware.github.io/cloudbolt-collector-helm/cloudbolt-collector-${{ inputs.chart_version }}.tgz) |"
-        echo "| Docs URL       | [Link](https://cloudboltsoftware.github.io/cloudbolt-collector-helm/) |"
-        echo "| Release URL    | [Link](https://github.com/CloudBoltSoftware/cloudbolt-collector-helm/releases/tag/${{ inputs.chart_version }}) |"
-        echo "| Public Key    | [Link](https://cloudboltsoftware.github.io/cloudbolt-collector-helm/public.key) |"
+        echo "| Key            | Value |" >> $GITHUB_STEP_SUMMARY
+        echo "|----------------|-------|" >> $GITHUB_STEP_SUMMARY
+        echo "| New Branch     | $NEW_BRANCH |"  >> $GITHUB_STEP_SUMMARY
+        echo "| App Version    | ${{ inputs.app_version }} |"  >> $GITHUB_STEP_SUMMARY
+        echo "| Chart Version  | ${{ inputs.chart_version }} |"  >> $GITHUB_STEP_SUMMARY
+        echo "| Image Tag      | ${{ inputs.image_tag }} |"  >> $GITHUB_STEP_SUMMARY
+        echo "| Latest Release | ${{ inputs.latest }} |"  >> $GITHUB_STEP_SUMMARY
+        echo "| Package URL    | [Link](https://cloudboltsoftware.github.io/cloudbolt-collector-helm/cloudbolt-collector-${{ inputs.chart_version }}.tgz) |"  >> $GITHUB_STEP_SUMMARY
+        echo "| Docs URL       | [Link](https://cloudboltsoftware.github.io/cloudbolt-collector-helm/) |"  >> $GITHUB_STEP_SUMMARY
+        echo "| Release URL    | [Link](https://github.com/CloudBoltSoftware/cloudbolt-collector-helm/releases/tag/${{ inputs.chart_version }}) |"  >> $GITHUB_STEP_SUMMARY
