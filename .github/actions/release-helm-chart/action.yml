@@ -83,7 +83,7 @@ runs:
     - name: Package Helm Chart
       shell: bash
       run: >
-        echo "${{ inputs.pgp_passphrase }}" | helm package \
+        echo "${{ inputs.pgp_passphrase }}" |
         helm package
         --version ${{ inputs.chart_version }}
         --app-version ${{ inputs.app_version }}
