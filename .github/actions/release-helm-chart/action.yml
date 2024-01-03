@@ -97,6 +97,7 @@ runs:
         --destination ./docs
         --sign
         --key 'CloudBolt Software Inc'
+        --keyring /home/runner/.gnupg/secring.gpg
         --passphrase-file -
         .
 
