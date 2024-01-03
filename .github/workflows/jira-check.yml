@@ -26,7 +26,7 @@ jobs:
         continue-on-error: true
         run: |
           PR_TITLE=$(jq -r .pull_request.title "$GITHUB_EVENT_PATH")
-          JIRA_TICKET_REGEX="^CMP-[0-9]+"
+          JIRA_TICKET_REGEX="CMP-[0-9]+"
           if ! [[ $PR_TITLE =~ $JIRA_TICKET_REGEX ]]; then
             echo "PR title does not contain a valid JIRA ticket format (CMP-xxxx)."
             exit 1
