@@ -77,7 +77,7 @@ runs:
     - name: Import PGP Key
       shell: bash
       run: |
-        echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode | gpg --import
+        echo "${{ inputs.pgp_private_key }}" | base64 --decode | gpg --import
 
     - name: Package Helm Chart
       shell: bash
