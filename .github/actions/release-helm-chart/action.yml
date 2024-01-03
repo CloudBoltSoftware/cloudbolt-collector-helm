@@ -74,11 +74,11 @@ runs:
       with:
         version: v3.12.1
 
-    - name: Import PGP Key
-      shell: bash
-      run: |
-        echo "${{ inputs.pgp_private_key }}" | base64 --decode | gpg --batch --import --pinentry-mode loopback ${{ inputs.pgp_passphrase }}
-
+    - name: Import GPG key
+      uses: crazy-max/ghaction-import-gpg@v6
+      with:
+        gpg_private_key: ${{ inputs.pgp_private_key }}
+        passphrase: ${{ inputs.pgp_passphrase }}
 
     - name: Package Helm Chart
       shell: bash
