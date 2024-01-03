@@ -21,3 +21,5 @@
 .idea/
 *.tmproj
 .vscode/
+# add docs folder
+docs/
