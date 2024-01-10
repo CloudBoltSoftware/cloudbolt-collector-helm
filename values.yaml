@@ -12,7 +12,7 @@ INGESTION_API_URL: ""
 image:
   repository: cloudboltsoftware/cloudbolt-collector
   pullPolicy: Always
-  tag: "v0.21.0"
+  tag: "v0.23.0"
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
