@@ -62,11 +62,11 @@ oc new-project cloudbolt-collector
 Create a new serviceaccount and assign it a new role in your OpenShift cluster:
 
 ```console
-oc create sa cloudbolt-collector
+oc create sa <service-account-name>
 ```
 
 ```console
-oc adm policy add-cluster-role-to-user cluster-monitoring-view -z cloudbolt-collector -n cloudbolt-collector
+oc adm policy add-cluster-role-to-user cluster-monitoring-view -z <service-account-name> -n cloudbolt-collector
 ```
 
 ### 5. Set Namespace/Project Annotations
@@ -88,6 +88,7 @@ export OCP_PORT="<openshift-cluster-port>"
 export OCP_SERVICENAME="<ocp-username>"
 export OCP_ENABLE_SSL_VERIFICATION="<SSL Verification for http and https>"
 export INGESTION_API_URL="<ingestion-api-url>"
+export SERVICEACCOUNTNAME="<service-account-name>"
 ```
 
 ### 7. Create Secrets for API Access
@@ -114,7 +115,8 @@ helm install cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
   --set OCP_PORT=$OCP_PORT \
   --set OCP_SERVICENAME=$OCP_SERVICENAME \
   --set OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION \
-  --set INGESTION_API_URL=$INGESTION_API_URL
+  --set INGESTION_API_URL=$INGESTION_API_URL \
+  --set SERVICEACCOUNTNAME=$SERVICEACCOUNTNAME
 ```
 
 ### Upgrade the Chart
@@ -133,7 +135,8 @@ helm upgrade cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
   --set OCP_PORT=$OCP_PORT \
   --set OCP_SERVICENAME=$OCP_SERVICENAME \
   --set OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION \
-  --set INGESTION_API_URL=$INGESTION_API_URL
+  --set INGESTION_API_URL=$INGESTION_API_URL \
+  --ser SERVICEACCOUNTNAME=$SERVICEACCOUNTNAME
 ```
 
 If you wish to upgrade to a specific version, use the `--version` flag:
@@ -146,5 +149,6 @@ helm upgrade cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
   --set OCP_PORT=$OCP_PORT \
   --set OCP_SERVICENAME=$OCP_SERVICENAME \
   --set OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION \
-  --set INGESTION_API_URL=$INGESTION_API_URL
+  --set INGESTION_API_URL=$INGESTION_API_URL \
+  --set SERVICEACCOUNTNAME=$SERVICEACCOUNTNAME
 ```

@@ -21,7 +21,7 @@ serviceAccount:
   create: false
   automount: true
   annotations: {}
-  name: "cloudbolt-collector"
+  name: ""
 podAnnotations: {}
 podLabels: {}
 podSecurityContext:
