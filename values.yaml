@@ -12,15 +12,15 @@ INGESTION_API_URL: ""
 image:
   repository: cloudboltsoftware/cloudbolt-collector
   pullPolicy: Always
-  tag: "v0.23.0"
+  tag: "v0.21.0"
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 serviceAccount:
-  create: true
+  create: false
   automount: true
   annotations: {}
-  name: ""
+  name: "cloudbolt-collector"
 podAnnotations: {}
 podLabels: {}
 podSecurityContext:

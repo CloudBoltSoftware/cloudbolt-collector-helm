@@ -57,7 +57,19 @@ Create a new project or namespace in your OpenShift cluster:
 oc new-project cloudbolt-collector
 ```
 
-### 4. Set Namespace/Project Annotations
+### 4. Create a New ServiceAccount and assign a new role
+
+Create a new serviceaccount and assign it a new role in your OpenShift cluster:
+
+```console
+oc create sa cloudbolt-collector
+```
+
+```console
+oc adm policy add-cluster-role-to-user cluster-monitoring-view -z cloudbolt-collector -n cloudbolt-collector
+```
+
+### 5. Set Namespace/Project Annotations
 
 Annotate the newly created namespace:
 
@@ -65,7 +77,7 @@ Annotate the newly created namespace:
 oc annotate --overwrite namespace cloudbolt-collector openshift.io/sa.scc.uid-range='1000/1000' openshift.io/sa.scc.supplemental-groups='1000/1000'
 ```
 
-### 5. Set Environmental Variables
+### 6. Set Environmental Variables
 
 Replace `<placeholders>` with appropriate values:
 
@@ -78,7 +90,7 @@ export OCP_ENABLE_SSL_VERIFICATION="<SSL Verification for http and https>"
 export INGESTION_API_URL="<ingestion-api-url>"
 ```
 
-### 6. Create Secrets for API Access
+### 7. Create Secrets for API Access
 
 Create the necessary secrets for API access:
 
@@ -91,7 +103,7 @@ oc create secret generic cb-ingestion-token \
   --from-literal=INGESTION_API_TOKEN=<ingestion-api-token> \
   -n cloudbolt-collector
 ```
-### 7. Install the Chart
+### 8. Install the Chart
 
 Install the latest CloudBolt Collector Helm chart from the `cloudbolt-collector` repository. 
 If you want to install version `v0.20.0`, you can specify it using the `--version` flag:
