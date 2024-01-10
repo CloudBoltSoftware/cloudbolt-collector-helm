@@ -88,7 +88,7 @@ export OCP_PORT="<openshift-cluster-port>"
 export OCP_SERVICENAME="<ocp-username>"
 export OCP_ENABLE_SSL_VERIFICATION="<SSL Verification for http and https>"
 export INGESTION_API_URL="<ingestion-api-url>"
-export SERVICEACCOUNTNAME="<service-account-name>"
+export SERVICE_ACCOUNT_NAME="<service-account-name>"
 ```
 
 ### 7. Create Secrets for API Access
@@ -116,7 +116,7 @@ helm install cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
   --set OCP_SERVICENAME=$OCP_SERVICENAME \
   --set OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION \
   --set INGESTION_API_URL=$INGESTION_API_URL \
-  --set SERVICEACCOUNTNAME=$SERVICEACCOUNTNAME
+  --set SERVICE_ACCOUNT_NAME=$SERVICE_ACCOUNT_NAME
 ```
 
 ### Upgrade the Chart
@@ -136,7 +136,7 @@ helm upgrade cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
   --set OCP_SERVICENAME=$OCP_SERVICENAME \
   --set OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION \
   --set INGESTION_API_URL=$INGESTION_API_URL \
-  --ser SERVICEACCOUNTNAME=$SERVICEACCOUNTNAME
+  --ser SERVICE_ACCOUNT_NAME=$SERVICE_ACCOUNT_NAME
 ```
 
 If you wish to upgrade to a specific version, use the `--version` flag:
@@ -150,5 +150,5 @@ helm upgrade cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
   --set OCP_SERVICENAME=$OCP_SERVICENAME \
   --set OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION \
   --set INGESTION_API_URL=$INGESTION_API_URL \
-  --set SERVICEACCOUNTNAME=$SERVICEACCOUNTNAME
+  --set SERVICE_ACCOUNT_NAME=$SERVICE_ACCOUNT_NAME
 ```
