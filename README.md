@@ -22,9 +22,9 @@ Below is a table of various parameters that can be set in the `values.yaml` file
 | `IMAGE_VERSION`                    | No         | Version of the image                 | `"<helm-chart-version>"`|
 | `OCP_IP`                           | Yes        | OpenShift Cluster IP                 | `""` (empty string) |
 | `OCP_PORT`                         | Yes        | OpenShift Cluster Port               | `""` (empty string) |
-| `OCP_SERVICENAME`                  | Yes        | OpenShift Service Name               | `""` (empty string) |
 | `OCP_ENABLE_SSL_VERIFICATION`      | No         | SSL Verification for HTTP and HTTPS  | `""` (empty string) |
 | `INGESTION_API_URL`                | Yes        | Ingestion API URL                    | `""` (empty string) |
+| `SERVICE_ACCOUNT_NAME`             | Yes        | OpenShift ServiceAccountName         | `""` (empty string) |
 
 ## Prerequisites
 
@@ -85,7 +85,6 @@ Replace `<placeholders>` with appropriate values:
 export IMAGE_VERSION="<release-version>"  # Default is chart version
 export OCP_IP="<openshift-cluster-ip>"
 export OCP_PORT="<openshift-cluster-port>"
-export OCP_SERVICENAME="<ocp-username>"
 export OCP_ENABLE_SSL_VERIFICATION="<SSL Verification for http and https>"
 export INGESTION_API_URL="<ingestion-api-url>"
 export SERVICE_ACCOUNT_NAME="<service-account-name>"
@@ -96,10 +95,6 @@ export SERVICE_ACCOUNT_NAME="<service-account-name>"
 Create the necessary secrets for API access:
 
 ```console
-oc create secret generic my-ocp-secret \
-  --from-literal=OCP_SERVICEPASS=<ocp-password> \
-  -n cloudbolt-collector
-
 oc create secret generic cb-ingestion-token \
   --from-literal=INGESTION_API_TOKEN=<ingestion-api-token> \
   -n cloudbolt-collector
@@ -113,7 +108,6 @@ If you want to install version `v0.20.0`, you can specify it using the `--versio
 helm install cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
   --set OCP_IP=$OCP_IP \
   --set OCP_PORT=$OCP_PORT \
-  --set OCP_SERVICENAME=$OCP_SERVICENAME \
   --set OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION \
   --set INGESTION_API_URL=$INGESTION_API_URL \
   --set SERVICE_ACCOUNT_NAME=$SERVICE_ACCOUNT_NAME
@@ -133,7 +127,6 @@ Then, upgrade the release to the desired version. If you want to upgrade to the 
 helm upgrade cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
   --set OCP_IP=$OCP_IP \
   --set OCP_PORT=$OCP_PORT \
-  --set OCP_SERVICENAME=$OCP_SERVICENAME \
   --set OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION \
   --set INGESTION_API_URL=$INGESTION_API_URL \
   --ser SERVICE_ACCOUNT_NAME=$SERVICE_ACCOUNT_NAME
@@ -147,7 +140,6 @@ helm upgrade cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
   --set IMAGE_VERSION=$IMAGE_VERSION \
   --set OCP_IP=$OCP_IP \
   --set OCP_PORT=$OCP_PORT \
-  --set OCP_SERVICENAME=$OCP_SERVICENAME \
   --set OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION \
   --set INGESTION_API_URL=$INGESTION_API_URL \
   --set SERVICE_ACCOUNT_NAME=$SERVICE_ACCOUNT_NAME
