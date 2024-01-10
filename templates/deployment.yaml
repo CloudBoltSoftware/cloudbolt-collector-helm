@@ -27,7 +27,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "cloudbolt-collector-helm.serviceAccountName" . }}
+      serviceAccountName: {{ .Values.SERVICEACCOUNTNAME | default include "cloudbolt-collector-helm.serviceAccountName" }}
       securityContext:
        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:

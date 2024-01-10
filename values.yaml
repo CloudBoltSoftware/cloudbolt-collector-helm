@@ -9,6 +9,7 @@ OCP_PORT: ""
 OCP_SERVICENAME: ""
 OCP_ENABLE_SSL_VERIFICATION: ""
 INGESTION_API_URL: ""
+SERVICEACCOUNTNAME: ""
 image:
   repository: cloudboltsoftware/cloudbolt-collector
   pullPolicy: Always
