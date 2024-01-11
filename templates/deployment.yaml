@@ -43,10 +43,6 @@ spec:
           env:
            - name: DEBUG
              value: {{ quote .Values.DEBUG }}
-           - name: OCP_IP
-             value: {{ quote .Values.OCP_IP }}
-           - name: OCP_PORT
-             value: {{ quote .Values.OCP_PORT }}
            - name: OCP_ENABLE_SSL_VERIFICATION
              value: {{ quote .Values.OCP_ENABLE_SSL_VERIFICATION | default "False" }}
            - name: INGESTION_API_URL
