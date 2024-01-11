@@ -27,7 +27,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "cloudbolt-collector-helm.serviceAccountName" . }}
+      serviceAccountName: {{ .Values.SERVICE_ACCOUNT_NAME }}
       securityContext:
        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -43,17 +43,6 @@ spec:
           env:
            - name: DEBUG
              value: {{ quote .Values.DEBUG }}
-           - name: OCP_IP
-             value: {{ quote .Values.OCP_IP }}
-           - name: OCP_PORT
-             value: {{ quote .Values.OCP_PORT }}
-           - name: OCP_SERVICENAME
-             value: {{ quote .Values.OCP_SERVICENAME }}
-           - name: OCP_SERVICEPASS
-             valueFrom:
-               secretKeyRef:
-                 name: my-ocp-secret
-                 key: OCP_SERVICEPASS
            - name: OCP_ENABLE_SSL_VERIFICATION
              value: {{ quote .Values.OCP_ENABLE_SSL_VERIFICATION | default "False" }}
            - name: INGESTION_API_URL
