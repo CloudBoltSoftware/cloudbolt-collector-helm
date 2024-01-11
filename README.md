@@ -20,8 +20,6 @@ Below is a table of various parameters that can be set in the `values.yaml` file
 |------------------------------------|------------|--------------------------------------|---------------------|
 | `DEBUG`                            | No         | Debug mode flag                      | `""` (empty string) |
 | `IMAGE_VERSION`                    | No         | Version of the image                 | `"<helm-chart-version>"`|
-| `OCP_IP`                           | Yes        | OpenShift Cluster IP                 | `""` (empty string) |
-| `OCP_PORT`                         | Yes        | OpenShift Cluster Port               | `""` (empty string) |
 | `OCP_ENABLE_SSL_VERIFICATION`      | No         | SSL Verification for HTTP and HTTPS  | `""` (empty string) |
 | `INGESTION_API_URL`                | Yes        | Ingestion API URL                    | `""` (empty string) |
 | `SERVICE_ACCOUNT_NAME`             | Yes        | OpenShift ServiceAccountName         | `""` (empty string) |
@@ -57,7 +55,15 @@ Create a new project or namespace in your OpenShift cluster:
 oc new-project cloudbolt-collector
 ```
 
-### 4. Create a New ServiceAccount and assign a new role
+### 4. Set Namespace/Project Annotations
+
+Annotate the newly created namespace:
+
+```console
+oc annotate --overwrite namespace cloudbolt-collector openshift.io/sa.scc.uid-range='1000/1000' openshift.io/sa.scc.supplemental-groups='1000/1000'
+```
+
+### 5. Create a New ServiceAccount and assign a new role
 
 Create a new serviceaccount and assign it a new role in your OpenShift cluster:
 
@@ -66,15 +72,25 @@ oc create sa <service-account-name>
 ```
 
 ```console
-oc adm policy add-cluster-role-to-user cluster-monitoring-view -z <service-account-name> -n cloudbolt-collector
+oc adm policy add-cluster-role-to-user admin -z <service-account-name> -n cloudbolt-collector
 ```
 
-### 5. Set Namespace/Project Annotations
-
-Annotate the newly created namespace:
+```console
+oc describe sa <service-account-name>
+```
+--Copy the token's secret name from the response of above command
 
 ```console
-oc annotate --overwrite namespace cloudbolt-collector openshift.io/sa.scc.uid-range='1000/1000' openshift.io/sa.scc.supplemental-groups='1000/1000'
+oc describe secret <token's-secret-name>
+```
+--Copy the token displayed in the response of above command
+
+```console
+oc login --token=<token>
+```
+
+```console
+oc project cloudbolt-collector
 ```
 
 ### 6. Set Environmental Variables
