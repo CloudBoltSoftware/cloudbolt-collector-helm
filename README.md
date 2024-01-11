@@ -65,7 +65,7 @@ oc annotate --overwrite namespace cloudbolt-collector openshift.io/sa.scc.uid-ra
 
 ### 5. Create a New ServiceAccount and assign a new role
 
-Create a new serviceaccount and assign it a new role in your OpenShift cluster:
+Create a new service account and assign it a new role in your OpenShift cluster:
 
 ```console
 oc create sa <service-account-name>
@@ -75,19 +75,25 @@ oc create sa <service-account-name>
 oc adm policy add-cluster-role-to-user admin -z <service-account-name> -n cloudbolt-collector
 ```
 
+Copy the service account token's secret name from the response of following command:
+
 ```console
 oc describe sa <service-account-name>
 ```
---Copy the token's secret name from the response of above command
+
+Copy the token value from the response of following command:
 
 ```console
 oc describe secret <token's-secret-name>
 ```
---Copy the token displayed in the response of above command
+
+Login with service account token copied from response of above command:
 
 ```console
-oc login --token=<token>
+oc login --token=<service-account-token>
 ```
+
+Select the project in which we are going deploy with following command:
 
 ```console
 oc project cloudbolt-collector
