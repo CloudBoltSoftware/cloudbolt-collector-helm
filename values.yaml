@@ -4,13 +4,11 @@
 replicaCount: 1
 DEBUG: ""
 IMAGE_VERSION: ""
-OCP_ENABLE_SSL_VERIFICATION: ""
 INGESTION_API_URL: ""
 SERVICE_ACCOUNT_NAME: ""
 image:
   repository: cloudboltsoftware/cloudbolt-collector
   pullPolicy: Always
-  tag: "v0.26.0"
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
