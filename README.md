@@ -20,7 +20,6 @@ Below is a table of various parameters that can be set in the `values.yaml` file
 |------------------------------------|------------|--------------------------------------|---------------------|
 | `DEBUG`                            | No         | Debug mode flag                      | `""` (empty string) |
 | `IMAGE_VERSION`                    | No         | Version of the image                 | `"<helm-chart-version>"`|
-| `OCP_ENABLE_SSL_VERIFICATION`      | No         | SSL Verification for HTTP and HTTPS  | `""` (empty string) |
 | `INGESTION_API_URL`                | Yes        | Ingestion API URL                    | `""` (empty string) |
 | `SERVICE_ACCOUNT_NAME`             | Yes        | OpenShift ServiceAccountName         | `""` (empty string) |
 
@@ -105,7 +104,6 @@ Replace `<placeholders>` with appropriate values:
 
 ```console
 export IMAGE_VERSION="<release-version>"  # Default is chart version
-export OCP_ENABLE_SSL_VERIFICATION="<SSL Verification for http and https>"
 export INGESTION_API_URL="<ingestion-api-url>"
 export SERVICE_ACCOUNT_NAME="<service-account-name>"
 ```
@@ -126,7 +124,6 @@ If you want to install version `v0.20.0`, you can specify it using the `--versio
 
 ```console
 helm install cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
-  --set OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION \
   --set INGESTION_API_URL=$INGESTION_API_URL \
   --set SERVICE_ACCOUNT_NAME=$SERVICE_ACCOUNT_NAME
 ```
@@ -143,7 +140,6 @@ Then, upgrade the release to the desired version. If you want to upgrade to the 
 
 ```console
 helm upgrade cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
-  --set OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION \
   --set INGESTION_API_URL=$INGESTION_API_URL \
   --ser SERVICE_ACCOUNT_NAME=$SERVICE_ACCOUNT_NAME
 ```
@@ -154,7 +150,6 @@ If you wish to upgrade to a specific version, use the `--version` flag:
 helm upgrade cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
   --version v0.21.0 \
   --set IMAGE_VERSION=$IMAGE_VERSION \
-  --set OCP_ENABLE_SSL_VERIFICATION=$OCP_ENABLE_SSL_VERIFICATION \
   --set INGESTION_API_URL=$INGESTION_API_URL \
   --set SERVICE_ACCOUNT_NAME=$SERVICE_ACCOUNT_NAME
 ```

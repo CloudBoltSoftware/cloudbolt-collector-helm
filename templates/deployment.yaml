@@ -34,7 +34,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.IMAGE_VERSION | default .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.IMAGE_VERSION | default .Chart.Version }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -42,11 +42,9 @@ spec:
               protocol: TCP
           env:
            - name: DEBUG
-             value: {{ quote .Values.DEBUG }}
-           - name: OCP_ENABLE_SSL_VERIFICATION
-             value: {{ quote .Values.OCP_ENABLE_SSL_VERIFICATION | default "False" }}
+             value: "{{ .Values.DEBUG }}"
            - name: INGESTION_API_URL
-             value: {{ quote .Values.INGESTION_API_URL }}
+             value: "{{ .Values.INGESTION_API_URL }}"
            - name: INGESTION_API_TOKEN
              valueFrom:
                secretKeyRef:
