@@ -9,6 +9,7 @@ SERVICE_ACCOUNT_NAME: ""
 image:
   repository: cloudboltsoftware/cloudbolt-collector
   pullPolicy: Always
+  tag: v0.28.0
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
