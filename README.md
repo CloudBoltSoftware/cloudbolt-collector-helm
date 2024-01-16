@@ -62,7 +62,7 @@ Annotate the newly created namespace:
 oc annotate --overwrite namespace cloudbolt-collector openshift.io/sa.scc.uid-range='1000/1000' openshift.io/sa.scc.supplemental-groups='1000/1000'
 ```
 
-### 5. Create a New ServiceAccount and assign a new role
+### 5. Create a new Service Account
 
 Create a new service account and assign it a new role in your OpenShift cluster:
 
@@ -70,8 +70,13 @@ Create a new service account and assign it a new role in your OpenShift cluster:
 oc create sa <service-account-name>
 ```
 
+### 6. Create a new Role and assign to service account
+
 ```console
-oc adm policy add-cluster-role-to-user admin -z <service-account-name> -n cloudbolt-collector
+oc create role cloudbolt-collector-monitoring --verb=get --resource=pod,node,persistentvolume,persistentvolumeclaim
+```
+```console
+oc adm policy add-role-to-user cloudbolt-collector-monitoring -z <service-account-name> -n cloudbolt-collector
 ```
 
 Copy the service account token's secret name from the response of following command:
@@ -98,7 +103,7 @@ Select the project in which we are going deploy with following command:
 oc project cloudbolt-collector
 ```
 
-### 6. Set Environmental Variables
+### 7. Set Environmental Variables
 
 Replace `<placeholders>` with appropriate values:
 
@@ -108,7 +113,7 @@ export INGESTION_API_URL="<ingestion-api-url>"
 export SERVICE_ACCOUNT_NAME="<service-account-name>"
 ```
 
-### 7. Create Secrets for API Access
+### 8. Create Secrets for API Access
 
 Create the necessary secrets for API access:
 
@@ -117,7 +122,7 @@ oc create secret generic cb-ingestion-token \
   --from-literal=INGESTION_API_TOKEN=<ingestion-api-token> \
   -n cloudbolt-collector
 ```
-### 8. Install the Chart
+### 9. Install the Chart
 
 Install the latest CloudBolt Collector Helm chart from the `cloudbolt-collector` repository. 
 If you want to install version `v0.20.0`, you can specify it using the `--version` flag:
