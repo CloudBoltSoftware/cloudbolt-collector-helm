@@ -21,7 +21,6 @@ Below is a table of various parameters that can be set in the `values.yaml` file
 | `DEBUG`                            | No         | Debug mode flag                      | `""` (empty string) |
 | `IMAGE_VERSION`                    | No         | Version of the image                 | `"<helm-chart-version>"`|
 | `INGESTION_API_URL`                | Yes        | Ingestion API URL                    | `""` (empty string) |
-| `SERVICE_ACCOUNT_NAME`             | Yes        | OpenShift ServiceAccountName         | `""` (empty string) |
 
 ## Prerequisites
 
@@ -62,45 +61,7 @@ Annotate the newly created namespace:
 oc annotate --overwrite namespace cloudbolt-collector openshift.io/sa.scc.uid-range='1000/1000' openshift.io/sa.scc.supplemental-groups='1000/1000'
 ```
 
-### 5. Create a new Service Account
-
-Create a new Service Account and assign it a new role in your OpenShift cluster:
-
-```console
-oc create sa <service-account-name>
-```
-
-### 6. Assign Cluster Roles to Service Account created in previous step
-
-First, **admin** role to grant a project/namespace manager permissions
-
-```console
-oc adm policy add-cluster-role-to-user admin -z <service-account-name> -n cloudbolt-collector
-```
-
-Second, **cluster-reader** role to grant Cluster level read-only permissions
-
-```console
-oc adm policy add-cluster-role-to-user cluster-reader -z <service-account-name> -n cloudbolt-collector
-```
-
-Copy the Service Account token's secret name from the response of following command:
-
-```console
-oc describe sa <service-account-name>
-```
-
-Copy the token value from the response of following command:
-
-```console
-oc describe secret <token's-secret-name>
-```
-
-Login with Service Account token copied from response of above command:
-
-```console
-oc login --token=<service-account-token>
-```
+### 5. Select the project
 
 Select the project in which we are going deploy with following command:
 
@@ -108,17 +69,16 @@ Select the project in which we are going deploy with following command:
 oc project cloudbolt-collector
 ```
 
-### 7. Set Environmental Variables
+### 6. Set Environmental Variables
 
 Replace `<placeholders>` with appropriate values:
 
 ```console
 export IMAGE_VERSION="<release-version>"  # Default is chart version
 export INGESTION_API_URL="<ingestion-api-url>"
-export SERVICE_ACCOUNT_NAME="<service-account-name>"
 ```
 
-### 8. Create Secrets for API Access
+### 7. Create Secrets for API Access
 
 Create the necessary secrets for API access:
 
@@ -127,15 +87,14 @@ oc create secret generic cb-ingestion-token \
   --from-literal=INGESTION_API_TOKEN=<ingestion-api-token> \
   -n cloudbolt-collector
 ```
-### 9. Install the Chart
+### 8. Install the Chart
 
 Install the latest CloudBolt Collector Helm chart from the `cloudbolt-collector` repository. 
 If you want to install version `v0.20.0`, you can specify it using the `--version` flag:
 
 ```console
 helm install cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
-  --set INGESTION_API_URL=$INGESTION_API_URL \
-  --set SERVICE_ACCOUNT_NAME=$SERVICE_ACCOUNT_NAME
+  --set INGESTION_API_URL=$INGESTION_API_URL
 ```
 
 ### Upgrade the Chart
@@ -150,8 +109,7 @@ Then, upgrade the release to the desired version. If you want to upgrade to the 
 
 ```console
 helm upgrade cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
-  --set INGESTION_API_URL=$INGESTION_API_URL \
-  --ser SERVICE_ACCOUNT_NAME=$SERVICE_ACCOUNT_NAME
+  --set INGESTION_API_URL=$INGESTION_API_URL
 ```
 
 If you wish to upgrade to a specific version, use the `--version` flag:
@@ -160,6 +118,5 @@ If you wish to upgrade to a specific version, use the `--version` flag:
 helm upgrade cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
   --version v0.21.0 \
   --set IMAGE_VERSION=$IMAGE_VERSION \
-  --set INGESTION_API_URL=$INGESTION_API_URL \
-  --set SERVICE_ACCOUNT_NAME=$SERVICE_ACCOUNT_NAME
+  --set INGESTION_API_URL=$INGESTION_API_URL
 ```

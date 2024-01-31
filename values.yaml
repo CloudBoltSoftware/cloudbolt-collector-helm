@@ -5,19 +5,23 @@ replicaCount: 1
 DEBUG: ""
 IMAGE_VERSION: ""
 INGESTION_API_URL: ""
-SERVICE_ACCOUNT_NAME: ""
 image:
   repository: cloudboltsoftware/cloudbolt-collector
   pullPolicy: Always
   tag: v0.28.0
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+
+namespaceOverride: ""
+
 serviceAccount:
-  create: false
+  create: true
   automount: true
   annotations: {}
   name: ""
+
 podAnnotations: {}
 podLabels: {}
 podSecurityContext:
@@ -40,6 +44,7 @@ liveness:
   initialDelaySeconds: 300
   failureThreshold: 3
   periodSeconds: 300
+
 ingress:
   enabled: false
   className: ""
@@ -50,12 +55,15 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
   tls: []
+
 resources: {}
+
 autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
+
 volumes: []
 volumeMounts: []
 nodeSelector: {}
