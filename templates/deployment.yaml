@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "cloudbolt-collector-helm.fullname" . }}
+  namespace: {{ include "cloudbolt-collector-helm.namespace" . }}
   labels:
     {{- include "cloudbolt-collector-helm.labels" . | nindent 4 }}
 spec:
@@ -19,7 +20,7 @@ spec:
       {{- end }}
       labels:
         {{- include "cloudbolt-collector-helm.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
+	{{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
@@ -27,13 +28,13 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ .Values.SERVICE_ACCOUNT_NAME }}
+      serviceAccountName: {{ include "cloudbolt-collector-helm.serviceAccountName" . }}
       securityContext:
-       {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-           {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.IMAGE_VERSION | default .Chart.Version }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
