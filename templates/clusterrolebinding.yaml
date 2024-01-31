@@ -2,7 +2,7 @@
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ include "cloudbolt-collector-helm.fullname" . }}-clusterrolebinding
+  name: {{ include "cloudbolt-collector-helm.fullname" . }}-clusterreader-clusterrolebinding
   labels:
     {{- include "cloudbolt-collector-helm.labels" . | nindent 4 }}
   {{- with .Values.serviceAccount.annotations }}
@@ -17,4 +17,24 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: cluster-reader
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "cloudbolt-collector-helm.fullname" . }}-admin-clusterrolebinding
+  labels:
+    {{- include "cloudbolt-collector-helm.labels" . | nindent 4 }}
+  {{- with .Values.serviceAccount.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "cloudbolt-collector-helm.serviceAccountName" . }}
+    namespace: {{ include "cloudbolt-collector-helm.namespace" . }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admin
 {{- end }}
