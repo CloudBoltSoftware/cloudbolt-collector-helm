@@ -1,0 +1,27 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+apiVersion: v2
+appVersion: v0.31.0
+description: Deploys an application that extracts Kubernetes cluster utilization data
+  and sends it to the CloudBolt platform.
+name: cloudbolt-collector
+type: application
+version: v0.31.0
+
+...
+files:
+  cloudbolt-collector-v0.31.0.tgz: sha256:6caff5d80b8ca931f58a93b5d70aeec53882516e03ab25d3fe51c81ffd62e876
+-----BEGIN PGP SIGNATURE-----
+
+wsDcBAEBCgAQBQJmi8BVCRAuSM8FMXx14wAA0u0MAFJD1HFFPvALO4xENLmIEHav
+PLXvJ9Jpnl0MHLs9zBjtpNRma72c1hGAQvxjF+o38ZVWKuLBN86WN06Gp+wpN76u
+Ls/AY22FSd4iSWEU+gXv6FGPjTKvXTQwYqr3lmVzYndgUuoHMzWB3APzgaZhpF3E
+Roy55Z8NFu7NawVhdNN6XX4NEN6wnSwCOJBytqbQrDj0JuL7L4Uhnl8VjDqW/L82
+BnRFsVkP1M0zhqYBwCo6SN8xdWmZBsDnyBM8V3TErdYZj94F/MQfTSGxETDRKOTo
+5mzy9V5kGTj1gI/MB2Ne03W9m3Hi1BK6wkZW0Z4JtpXJxtEz76cMpCA5WQPtrv9v
+hfI0dZEkbmGJ9Ko7HlHWWUeZLZQr5Ss0cd4BASp8QatJTneJkNsVgzt6uE883CXc
+pMeGJBrjeHGVpOq2z3tXpjVwOZTABSDLhf4hosmVBAqb5Yvp1QvgCpVlKejJS9Ce
+EjjPSnepS2N+6qY0Jj+6qMH5uUGJJ/N8eru2+Y6aZw==
+=20y6
+-----END PGP SIGNATURE-----
