@@ -51,15 +51,15 @@ spec:
                secretKeyRef:
                  name: cb-ingestion-token
                  key: INGESTION_API_TOKEN
-          livenessProbe:
-            exec:
-              command:
-                - /bin/bash
-                - -c
-                - find /tmp -type f -mmin -40 | grep liveness.txt
-            initialDelaySeconds: {{ .Values.liveness.initialDelaySeconds }}
-            failureThreshold: {{ .Values.liveness.failureThreshold }}
-            periodSeconds: {{ .Values.liveness.periodSeconds }}
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - /bin/bash
+          #       - -c
+          #       - find /tmp -type f -mmin -40 | grep liveness.txt
+          #   initialDelaySeconds: {{ .Values.liveness.initialDelaySeconds }}
+          #   failureThreshold: {{ .Values.liveness.failureThreshold }}
+          #   periodSeconds: {{ .Values.liveness.periodSeconds }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}
