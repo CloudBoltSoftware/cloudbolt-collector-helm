@@ -53,15 +53,7 @@ Create a new project or namespace in your OpenShift cluster:
 oc new-project cloudbolt-collector
 ```
 
-### 4. Set Namespace/Project Annotations
-
-Annotate the newly created namespace:
-
-```console
-oc annotate --overwrite namespace cloudbolt-collector openshift.io/sa.scc.uid-range='1000/1000' openshift.io/sa.scc.supplemental-groups='1000/1000'
-```
-
-### 5. Select the project
+### 4. Select the project
 
 Select the project in which we are going deploy with following command:
 
@@ -69,7 +61,7 @@ Select the project in which we are going deploy with following command:
 oc project cloudbolt-collector
 ```
 
-### 6. Set Environmental Variables
+### 5. Set Environmental Variables
 
 Replace `<placeholders>` with appropriate values:
 
@@ -78,7 +70,7 @@ export IMAGE_VERSION="<release-version>"  # Default is chart version
 export INGESTION_API_URL="<ingestion-api-url>"
 ```
 
-### 7. Create Secrets for API Access
+### 6. Create Secrets for API Access
 
 Create the necessary secrets for API access:
 
@@ -87,7 +79,7 @@ oc create secret generic cb-ingestion-token \
   --from-literal=INGESTION_API_TOKEN=<ingestion-api-token> \
   -n cloudbolt-collector
 ```
-### 8. Install the Chart
+### 7. Install the Chart
 
 Install the latest CloudBolt Collector Helm chart from the `cloudbolt-collector` repository. 
 If you want to install version `v0.20.0`, you can specify it using the `--version` flag:
