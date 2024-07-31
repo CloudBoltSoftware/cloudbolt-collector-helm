@@ -8,7 +8,7 @@ INGESTION_API_URL: ""
 image:
   repository: cloudboltsoftware/cloudbolt-collector
   pullPolicy: Always
-  tag: v0.31.0
+  tag: v0.33.0
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -22,8 +22,6 @@ podAnnotations: {}
 podLabels: {}
 podSecurityContext:
   runAsNonRoot: true
-  runAsUser: 1000
-  runAsGroup: 1000
   seccompProfile:
     type: "RuntimeDefault"
 securityContext:
