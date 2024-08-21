@@ -51,18 +51,13 @@ spec:
                secretKeyRef:
                  name: cb-ingestion-token
                  key: INGESTION_API_TOKEN
-          ##
-          ## Disabled as application does not expose any application endpoint.
-          ## 
-          # livenessProbe:
-          #   exec:
-          #     command:
-          #       - /bin/bash
-          #       - -c
-          #       - find /tmp -type f -mmin -40 | grep liveness.txt
-          #   initialDelaySeconds: {{ .Values.liveness.initialDelaySeconds }}
-          #   failureThreshold: {{ .Values.liveness.failureThreshold }}
-          #   periodSeconds: {{ .Values.liveness.periodSeconds }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.liveness.httpGet_path }}
+              port: {{ .Values.liveness.httpGet_port }}
+            initialDelaySeconds: {{ .Values.liveness.initialDelaySeconds }}
+            failureThreshold: {{ .Values.liveness.failureThreshold }}
+            periodSeconds: {{ .Values.liveness.periodSeconds }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}

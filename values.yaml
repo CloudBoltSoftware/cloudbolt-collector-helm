@@ -35,6 +35,8 @@ service:
   type: ClusterIP
   port: 8000
 liveness:
+  httpGet_path: /health/
+  httpGet_port: 8000
   initialDelaySeconds: 300
   failureThreshold: 3
   periodSeconds: 300
