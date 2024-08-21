@@ -52,11 +52,9 @@ spec:
                  name: cb-ingestion-token
                  key: INGESTION_API_TOKEN
           livenessProbe:
-            exec:
-              command:
-                - /bin/bash
-                - -c
-                - find /tmp -type f -mmin -40 | grep liveness.txt
+            httpGet:
+              path: {{ .Values.liveness.httpGet_path }}
+              port: {{ .Values.liveness.httpGet_port }}
             initialDelaySeconds: {{ .Values.liveness.initialDelaySeconds }}
             failureThreshold: {{ .Values.liveness.failureThreshold }}
             periodSeconds: {{ .Values.liveness.periodSeconds }}
