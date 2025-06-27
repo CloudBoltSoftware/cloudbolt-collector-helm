@@ -3,12 +3,13 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 DEBUG: ""
-IMAGE_VERSION: ""
+IMAGE_VERSION: "aks"
 INGESTION_API_URL: ""
+prometheusNamespace: "monitoring"
 image:
   repository: cloudboltsoftware/cloudbolt-collector
   pullPolicy: Always
-  tag: v0.40.0
+  tag: aks
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -21,14 +22,15 @@ serviceAccount:
 podAnnotations: {}
 podLabels: {}
 podSecurityContext:
-  runAsNonRoot: true
+  runAsNonRoot: false
+  runAsUser: 0
   seccompProfile:
     type: "RuntimeDefault"
 securityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
-  runAsNonRoot: true
+  runAsNonRoot: false
   seccompProfile:
     type: "RuntimeDefault"
 service:

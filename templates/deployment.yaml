@@ -51,6 +51,8 @@ spec:
                secretKeyRef:
                  name: cb-ingestion-token
                  key: INGESTION_API_TOKEN
+           - name: PROMETHEUS_NAMESPACE
+             value: "{{ .Values.prometheusNamespace | default "openshift-monitoring" }}"
           livenessProbe:
             httpGet:
               path: {{ .Values.liveness.httpGet_path }}
