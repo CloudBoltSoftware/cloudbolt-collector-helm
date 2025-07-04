@@ -5,7 +5,11 @@ replicaCount: 1
 DEBUG: ""
 IMAGE_VERSION: "aks"
 INGESTION_API_URL: ""
-prometheusNamespace: "monitoring"
+
+# Optional: Base URL for Prometheus and CoreAPI (e.g. "http://prometheus.monitoring.svc.cluster.local:9090")
+prometheusBaseUrl: ""
+coreapiBaseUrl: ""
+
 image:
   repository: cloudboltsoftware/cloudbolt-collector
   pullPolicy: Always

@@ -21,7 +21,8 @@ Below is a table of various parameters that can be set in the `values.yaml` file
 | `DEBUG`                            | No         | Debug mode flag                      | `""` (empty string) |
 | `IMAGE_VERSION`                    | No         | Version of the image                 | `"<helm-chart-version>"`|
 | `INGESTION_API_URL`                | Yes        | Ingestion API URL                    | `""` (empty string) |
-| `PROMETHEUS_NAMESPACE`                | No        | Namespace where  Prometheus is installed                   | `"openshift-monitoring"` |
+| `PROMETHEUS_BASE_URL`              | No         | URL to prometheus service            | `""` |
+| `COREAPI_BASE_URL`.                | No         | URL to core api.                     | `""` |
 
 ## Prerequisites
 
@@ -69,7 +70,13 @@ Replace `<placeholders>` with appropriate values:
 ```console
 export IMAGE_VERSION="<release-version>"  # Default is chart version
 export INGESTION_API_URL=["<ingestion-api-url>"](https://4eazbaw8z3.execute-api.eu-west-2.amazonaws.com/v1/data/ingest)
+
+# On normal kubernetes installations you must also overwrite the endpoints to reach the CoreAPI and Prometheus.
+# export PROMETHEUS_BASE_URL=""
+# export COREAPI_BASE_URL=""
 ```
+
+TODO: Update this for AKS installation.
 
 ### 6. Create Secrets for API Access
 
@@ -80,6 +87,7 @@ oc create secret generic cb-ingestion-token \
   --from-literal=INGESTION_API_TOKEN=hahaha \
   -n cloudbolt-collector
 ```
+
 ### 7. Install the Chart
 
 Install the latest CloudBolt Collector Helm chart from the `cloudbolt-collector` repository. 
