@@ -121,3 +121,17 @@ helm upgrade cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
   --set IMAGE_VERSION=$IMAGE_VERSION \
   --set INGESTION_API_URL=$INGESTION_API_URL
 ```
+
+
+
+
+export PROMETHEUS_BASE_URL="http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090"
+export COREAPI_BASE_URL="https://kubernetes.default.svc"
+export INGESTION_API_URL="https://gn36i03mq1.execute-api.eu-west-2.amazonaws.com/v1/data/ingest"
+kubectl create secret generic cb-ingestion-token \
+  --from-literal=INGESTION_API_TOKEN=hahaha \
+  -n cloudbolt-collector
+
+helm upgrade --install cloudbolt-collector ./ -f values.yaml --namespace cloudbolt-collector --create-namespace --set INGESTION_API_URL=$INGESTION_API_URL --set prometheusBaseUrl=$PROMETHEUS_BASE_URL --set coreapiBaseUrl=$COREAPI_BASE_URL --set DEBUG=true
+
+helm upgrade --install cloudbolt-collector ./ -f values.yaml --namespace cloudbolt-collector --create-namespace --set INGESTION_API_URL="https://c1i3z7ha68.execute-api.us-west-2.amazonaws.com/v1/data-ingest-api-dev-v1" --set DEBUG=true
