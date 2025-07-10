@@ -13,8 +13,19 @@ entries:
     - https://cloudboltsoftware.github.io/cloudbolt-collector-helm/cloudbolt-collector-v0.44.0.tgz
     version: v0.44.0
   - apiVersion: v2
+    appVersion: v0.43.0
+    created: "2025-07-09T13:40:31.058024791Z"
+    description: Deploys an application that extracts Kubernetes cluster utilization
+      data and sends it to the CloudBolt platform.
+    digest: 3d1185c23ff2f6d20bd0d9480c68d62773710bf6d3e850f0cc1a0cdc739f84d2
+    name: cloudbolt-collector
+    type: application
+    urls:
+    - https://cloudboltsoftware.github.io/cloudbolt-collector-helm/cloudbolt-collector-v0.43.0.tgz
+    version: v0.43.0
+  - apiVersion: v2
     appVersion: v0.40.0
-    created: "2025-07-09T14:08:21.043675783Z"
+    created: "2025-07-09T13:40:31.057386538Z"
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
     digest: fea2286f35146e697d6fdaced5f77aa13ea78ef365f7085538142778f1813ba0
