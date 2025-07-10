@@ -51,11 +51,11 @@ spec:
                secretKeyRef:
                  name: cb-ingestion-token
                  key: INGESTION_API_TOKEN
-          {{- with .Values.prometheusBaseUrl }}
+          {{- with .Values.PROMETHEUS_BASE_URL }}
            - name: PROMETHEUS_BASE_URL
              value: "{{ . }}"
           {{- end }}
-          {{- with .Values.coreapiBaseUrl }}
+          {{- with .Values.COREAPI_BASE_URL }}
            - name: COREAPI_BASE_URL
              value: "{{ . }}"
           {{- end }}

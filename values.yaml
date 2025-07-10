@@ -7,8 +7,8 @@ IMAGE_VERSION: ""
 INGESTION_API_URL: ""
 
 # Optional: Base URL for Prometheus and CoreAPI (e.g. "http://prometheus.monitoring.svc.cluster.local:9090")
-prometheusBaseUrl: ""
-coreapiBaseUrl: ""
+PROMETHEUS_BASE_URL: ""
+COREAPI_BASE_URL: ""
 
 clusterRole:
   # Set to true to create a ClusterRoles for the collector
