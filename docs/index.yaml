@@ -2,6 +2,17 @@ apiVersion: v1
 entries:
   cloudbolt-collector:
   - apiVersion: v2
+    appVersion: v0.46.0
+    created: "2025-07-09T17:05:05.501507168Z"
+    description: Deploys an application that extracts Kubernetes cluster utilization
+      data and sends it to the CloudBolt platform.
+    digest: 37b85cea15dd86d99befcd722e834d590f9b2958224bd17f6de0658dc778f7af
+    name: cloudbolt-collector
+    type: application
+    urls:
+    - https://cloudboltsoftware.github.io/cloudbolt-collector-helm/cloudbolt-collector-v0.46.0.tgz
+    version: v0.46.0
+  - apiVersion: v2
     appVersion: v0.45.0
     created: "2025-07-09T16:47:56.548410701Z"
     description: Deploys an application that extracts Kubernetes cluster utilization
@@ -47,7 +58,7 @@ entries:
     version: v0.40.0
   - apiVersion: v2
     appVersion: v0.39.0
-    created: "2025-07-09T16:47:56.546101217Z"
+    created: "2025-07-09T17:05:05.500258599Z"
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
     digest: cf04332b2db243ab01c4e8771a891a41b59799c93a9857beed9ca52e86f8a75d
@@ -58,7 +69,7 @@ entries:
     version: v0.39.0
   - apiVersion: v2
     appVersion: v0.38.0
-    created: "2025-07-09T16:47:56.544891782Z"
+    created: "2025-07-09T17:05:05.499620298Z"
 
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
@@ -70,7 +81,8 @@ entries:
     version: v0.38.0
   - apiVersion: v2
     appVersion: v0.37.0
-    created: "2025-07-09T16:47:56.543686335Z"
+    created: "2025-07-09T17:05:05.498993739Z"
+
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
     digest: b74b5e81d080c6db671f1786a860de1b2bc6926901c7c6bed18ffa2c6312a638
@@ -81,7 +93,7 @@ entries:
     version: v0.37.0
   - apiVersion: v2
     appVersion: v0.36.0
-    created: "2025-07-09T16:47:56.542333739Z"
+    created: "2025-07-09T17:05:05.498323057Z"
 
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
@@ -93,7 +105,7 @@ entries:
     version: v0.36.0
   - apiVersion: v2
     appVersion: v0.35.0
-    created: "2025-07-09T16:47:56.540156024Z"
+    created: "2025-07-09T17:05:05.49679414Z"
 
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
@@ -105,7 +117,7 @@ entries:
     version: v0.35.0
   - apiVersion: v2
     appVersion: v0.34.0
-    created: "2025-07-09T16:47:56.535636654Z"
+    created: "2025-07-09T17:05:05.495535538Z"
 
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
@@ -117,7 +129,7 @@ entries:
     version: v0.34.0
   - apiVersion: v2
     appVersion: v0.33.0
-    created: "2025-07-09T16:47:56.534466914Z"
+    created: "2025-07-09T17:05:05.49488306Z"
 
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
@@ -129,7 +141,7 @@ entries:
     version: v0.33.0
   - apiVersion: v2
     appVersion: v0.32.0
-    created: "2025-07-09T16:47:56.533243192Z"
+    created: "2025-07-09T17:05:05.494241313Z"
 
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
@@ -141,7 +153,7 @@ entries:
     version: v0.32.0
   - apiVersion: v2
     appVersion: v0.31.0
-    created: "2025-07-09T16:47:56.531733951Z"
+    created: "2025-07-09T17:05:05.493308047Z"
 
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
@@ -153,7 +165,7 @@ entries:
     version: v0.31.0
   - apiVersion: v2
     appVersion: v0.30.0
-    created: "2025-07-09T16:47:56.530535526Z"
+    created: "2025-07-09T17:05:05.492659777Z"
 
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
@@ -165,7 +177,7 @@ entries:
     version: v0.30.0
   - apiVersion: v2
     appVersion: v0.29.0
-    created: "2025-07-09T16:47:56.529334246Z"
+    created: "2025-07-09T17:05:05.492040461Z"
 
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
@@ -177,7 +189,7 @@ entries:
     version: v0.29.0
   - apiVersion: v2
     appVersion: v0.28.0
-    created: "2025-07-09T16:47:56.528108961Z"
+    created: "2025-07-09T17:05:05.491388645Z"
 
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
@@ -189,7 +201,7 @@ entries:
     version: v0.28.0
   - apiVersion: v2
     appVersion: v0.26.0
-    created: "2025-07-09T16:47:56.526906499Z"
+    created: "2025-07-09T17:05:05.490718864Z"
 
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
@@ -201,7 +213,7 @@ entries:
     version: v0.26.0
   - apiVersion: v2
     appVersion: v0.23.0
-    created: "2025-07-09T16:47:56.525723574Z"
+    created: "2025-07-09T17:05:05.490061507Z"
 
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
@@ -213,7 +225,7 @@ entries:
     version: v0.23.0
   - apiVersion: v2
     appVersion: v0.22.0
-    created: "2025-07-09T16:47:56.524257273Z"
+    created: "2025-07-09T17:05:05.489373783Z"
 
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
@@ -225,7 +237,7 @@ entries:
     version: v0.22.0
   - apiVersion: v2
     appVersion: v0.21.0
-    created: "2025-07-09T16:47:56.521938472Z"
+    created: "2025-07-09T17:05:05.487870698Z"
 
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
@@ -237,7 +249,7 @@ entries:
     version: v0.21.0
   - apiVersion: v2
     appVersion: v0.20.0
-    created: "2025-07-09T16:47:56.51822202Z"
+    created: "2025-07-09T17:05:05.486475419Z"
 
     description: Deploys an application that extracts Kubernetes cluster utilization
       data and sends it to the CloudBolt platform.
@@ -247,5 +259,4 @@ entries:
     urls:
     - https://cloudboltsoftware.github.io/cloudbolt-collector-helm/cloudbolt-collector-v0.20.0.tgz
     version: v0.20.0
-generated: "2025-07-09T16:47:56.511535265Z"
-
+generated: "2025-07-09T17:05:05.482355557Z"
