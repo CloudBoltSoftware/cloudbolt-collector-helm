@@ -37,9 +37,7 @@ securityContext:
   capabilities:
     drop: ["ALL"]
   runAsNonRoot: true
-  # only for AKS
-  runAsUser: 1001
-  # endonly
+  runAsUser:
   seccompProfile:
     type: "RuntimeDefault"
 service:
