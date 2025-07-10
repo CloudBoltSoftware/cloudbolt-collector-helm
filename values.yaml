@@ -10,6 +10,9 @@ INGESTION_API_URL: ""
 prometheusBaseUrl: ""
 coreapiBaseUrl: ""
 
+clusterRole:
+  # Set to true to create a ClusterRoles for the collector
+  create: false
 image:
   repository: cloudboltsoftware/cloudbolt-collector
   pullPolicy: Always
