@@ -125,7 +125,7 @@ As an additional prerequisite a Prometheus installation scraping node and pod me
 ```console
 export PROMETHEUS_BASE_URL="http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090"
 export COREAPI_BASE_URL="https://kubernetes.default.svc"
-export INGESTION_API_URL="https://gn36i03mq1.execute-api.eu-west-2.amazonaws.com/v1/data/ingest"
+export INGESTION_API_URL="<cloudbolt-ingestion-api-url>"
 
 # create a secret with the CloudBolt API token
 kubectl create secret generic cb-ingestion-token \
