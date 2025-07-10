@@ -16,13 +16,13 @@ and sends it to the CloudBolt platform.
 
 Below is a table of various parameters that can be set in the `values.yaml` file of the `cloudbolt-collector-helm` chart, along with their required status and default values:
 
-| Parameter                          | Required   | Description                          | Default Value       |
+| Helm Parameter                     | Required   | Description                          | Default Value       |
 |------------------------------------|------------|--------------------------------------|---------------------|
+| `INGESTION_API_URL`                | Yes        | Ingestion API URL                    | `""` (empty string) |
 | `DEBUG`                            | No         | Debug mode flag                      | `""` (empty string) |
 | `IMAGE_VERSION`                    | No         | Version of the image                 | `"<helm-chart-version>"`|
-| `INGESTION_API_URL`                | Yes        | Ingestion API URL                    | `""` (empty string) |
-| `PROMETHEUS_BASE_URL`              | No         | URL to prometheus service            | `""` |
-| `COREAPI_BASE_URL`.                | No         | URL to core api.                     | `""` |
+| `PROMETHEUS_BASE_URL`              | No         | URL to prometheus service            | `""` (defaults to OpenShift prometheus URL) |
+| `COREAPI_BASE_URL`.                | No         | URL to core api.                     | `""` (defaults to OpenShift coreapi URL) |
 
 ## Prerequisites
 
@@ -69,14 +69,8 @@ Replace `<placeholders>` with appropriate values:
 
 ```console
 export IMAGE_VERSION="<release-version>"  # Default is chart version
-export INGESTION_API_URL=["<ingestion-api-url>"](https://4eazbaw8z3.execute-api.eu-west-2.amazonaws.com/v1/data/ingest)
-
-# On normal kubernetes installations you must also overwrite the endpoints to reach the CoreAPI and Prometheus.
-# export PROMETHEUS_BASE_URL=""
-# export COREAPI_BASE_URL=""
+export INGESTION_API_URL="<ingestion-api-url>"
 ```
-
-TODO: Update this for AKS installation.
 
 ### 6. Create Secrets for API Access
 
@@ -122,23 +116,28 @@ helm upgrade cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
   --set INGESTION_API_URL=$INGESTION_API_URL
 ```
 
+## Installation on Microsoft Azure
 
+This helm chart was also succesfully used on Azure's Kubernetes cluster (AKS) and might even work on other Kubernetes offerings.
 
+As an additional prerequisite a Prometheus installation scraping node and pod metrics is required.
 
+```console
 export PROMETHEUS_BASE_URL="http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090"
 export COREAPI_BASE_URL="https://kubernetes.default.svc"
 export INGESTION_API_URL="https://gn36i03mq1.execute-api.eu-west-2.amazonaws.com/v1/data/ingest"
+
+# create a secret with the CloudBolt API token
 kubectl create secret generic cb-ingestion-token \
-  --from-literal=INGESTION_API_TOKEN=hahaha \
+  --from-literal=INGESTION_API_TOKEN=<cloudbolt-ingestion-api-token> \
   -n cloudbolt-collector
 
+# Updates or installs the cloudbolt-collector helm chart
 helm upgrade --install cloudbolt-collector ./ -f values.yaml \
   --namespace cloudbolt-collector --create-namespace \
   --set INGESTION_API_URL=$INGESTION_API_URL \
   --set PROMETHEUS_BASE_URL=$PROMETHEUS_BASE_URL \
   --set COREAPI_BASE_URL=$COREAPI_BASE_URL \
-  --set DEBUG=true \
   --set clusterRole.create=true \
   --set securityContext.runAsUser=1001
-
-helm upgrade --install cloudbolt-collector ./ -f values.yaml --namespace cloudbolt-collector --create-namespace --set INGESTION_API_URL="https://c1i3z7ha68.execute-api.us-west-2.amazonaws.com/v1/data-ingest-api-dev-v1" --set DEBUG=true
+```
