@@ -133,7 +133,7 @@ kubectl create secret generic cb-ingestion-token \
   -n cloudbolt-collector
 
 # Updates or installs the cloudbolt-collector helm chart
-helm upgrade --install cloudbolt-collector ./ -f values.yaml \
+helm upgrade --install cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
   --namespace cloudbolt-collector --create-namespace \
   --set INGESTION_API_URL=$INGESTION_API_URL \
   --set PROMETHEUS_BASE_URL=$PROMETHEUS_BASE_URL \
