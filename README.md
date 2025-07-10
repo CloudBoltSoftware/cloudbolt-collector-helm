@@ -84,7 +84,7 @@ Create the necessary secrets for API access:
 
 ```console
 oc create secret generic cb-ingestion-token \
-  --from-literal=INGESTION_API_TOKEN=hahaha \
+  --from-literal=INGESTION_API_TOKEN=<ingestion-api-token> \
   -n cloudbolt-collector
 ```
 
