@@ -5,6 +5,14 @@ replicaCount: 1
 DEBUG: ""
 IMAGE_VERSION: ""
 INGESTION_API_URL: ""
+
+# Optional: Base URL for Prometheus and CoreAPI (e.g. "http://prometheus.monitoring.svc.cluster.local:9090")
+PROMETHEUS_BASE_URL: ""
+COREAPI_BASE_URL: ""
+
+clusterRole:
+  # Set to true to create a ClusterRoles for the collector
+  create: false
 image:
   repository: cloudboltsoftware/cloudbolt-collector
   pullPolicy: Always
@@ -29,6 +37,7 @@ securityContext:
   capabilities:
     drop: ["ALL"]
   runAsNonRoot: true
+  runAsUser:
   seccompProfile:
     type: "RuntimeDefault"
 service:

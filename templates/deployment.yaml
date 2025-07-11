@@ -51,6 +51,14 @@ spec:
                secretKeyRef:
                  name: cb-ingestion-token
                  key: INGESTION_API_TOKEN
+          {{- with .Values.PROMETHEUS_BASE_URL }}
+           - name: PROMETHEUS_BASE_URL
+             value: "{{ . }}"
+          {{- end }}
+          {{- with .Values.COREAPI_BASE_URL }}
+           - name: COREAPI_BASE_URL
+             value: "{{ . }}"
+          {{- end }}
           livenessProbe:
             httpGet:
               path: {{ .Values.liveness.httpGet_path }}

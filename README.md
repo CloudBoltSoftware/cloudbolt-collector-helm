@@ -16,11 +16,13 @@ and sends it to the CloudBolt platform.
 
 Below is a table of various parameters that can be set in the `values.yaml` file of the `cloudbolt-collector-helm` chart, along with their required status and default values:
 
-| Parameter                          | Required   | Description                          | Default Value       |
+| Helm Parameter                     | Required   | Description                          | Default Value       |
 |------------------------------------|------------|--------------------------------------|---------------------|
+| `INGESTION_API_URL`                | Yes        | Ingestion API URL                    | `""` (empty string) |
 | `DEBUG`                            | No         | Debug mode flag                      | `""` (empty string) |
 | `IMAGE_VERSION`                    | No         | Version of the image                 | `"<helm-chart-version>"`|
-| `INGESTION_API_URL`                | Yes        | Ingestion API URL                    | `""` (empty string) |
+| `PROMETHEUS_BASE_URL`              | No         | URL to prometheus service            | `""` (defaults to OpenShift prometheus URL) |
+| `COREAPI_BASE_URL`.                | No         | URL to core api.                     | `""` (defaults to OpenShift coreapi URL) |
 
 ## Prerequisites
 
@@ -79,6 +81,7 @@ oc create secret generic cb-ingestion-token \
   --from-literal=INGESTION_API_TOKEN=<ingestion-api-token> \
   -n cloudbolt-collector
 ```
+
 ### 7. Install the Chart
 
 Install the latest CloudBolt Collector Helm chart from the `cloudbolt-collector` repository. 
@@ -111,4 +114,30 @@ helm upgrade cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
   --version v0.21.0 \
   --set IMAGE_VERSION=$IMAGE_VERSION \
   --set INGESTION_API_URL=$INGESTION_API_URL
+```
+
+## Installation on Microsoft Azure
+
+This helm chart was also succesfully used on Azure's Kubernetes cluster (AKS) and might even work on other Kubernetes offerings.
+
+As an additional prerequisite a Prometheus installation scraping node and pod metrics is required.
+
+```console
+export PROMETHEUS_BASE_URL="http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090"
+export COREAPI_BASE_URL="https://kubernetes.default.svc"
+export INGESTION_API_URL="<cloudbolt-ingestion-api-url>"
+
+# create a secret with the CloudBolt API token
+kubectl create secret generic cb-ingestion-token \
+  --from-literal=INGESTION_API_TOKEN=<cloudbolt-ingestion-api-token> \
+  -n cloudbolt-collector
+
+# Updates or installs the cloudbolt-collector helm chart
+helm upgrade --install cloudbolt-collector cloudbolt-collector/cloudbolt-collector \
+  --namespace cloudbolt-collector --create-namespace \
+  --set INGESTION_API_URL=$INGESTION_API_URL \
+  --set PROMETHEUS_BASE_URL=$PROMETHEUS_BASE_URL \
+  --set COREAPI_BASE_URL=$COREAPI_BASE_URL \
+  --set clusterRole.create=true \
+  --set securityContext.runAsUser=1001
 ```
