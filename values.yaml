@@ -14,7 +14,7 @@ clusterRole:
 image:
   repository: cloudboltsoftware/cloudbolt-collector
   pullPolicy: Always
-  tag: v0.52.0
+  tag: v0.53.0
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
